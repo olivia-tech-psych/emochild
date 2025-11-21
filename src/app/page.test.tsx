@@ -70,37 +70,42 @@ describe('Home Page', () => {
             // Clear localStorage before each property test iteration
             localStorageMock.clear();
             
-            // Render the component
-            const { unmount } = renderWithContext(<Home />);
+            // Render the component with a container
+            const { unmount, container } = renderWithContext(<Home />);
             
-            // Wait for context to initialize
-            await waitFor(() => {
-              expect(screen.getByLabelText(/emotion log input/i)).toBeInTheDocument();
-            });
-            
-            // Get the input element
-            const input = screen.getByLabelText(/emotion log input/i) as HTMLTextAreaElement;
-            
-            // Type the text into the input
-            fireEvent.change(input, { target: { value: inputText } });
-            
-            // Verify text is in the input
-            expect(input.value).toBe(inputText);
-            
-            // Click the appropriate action button
-            const button = actionType === 'expressed' 
-              ? screen.getByLabelText(/express emotion/i)
-              : screen.getByLabelText(/suppress emotion/i);
-            
-            fireEvent.click(button);
-            
-            // Wait for the input to be cleared
-            await waitFor(() => {
-              expect(input.value).toBe('');
-            });
-            
-            // Cleanup
-            unmount();
+            try {
+              // Wait for context to initialize
+              await waitFor(() => {
+                expect(screen.getByLabelText(/emotion log input/i)).toBeInTheDocument();
+              });
+              
+              // Get the input element
+              const input = screen.getByLabelText(/emotion log input/i) as HTMLTextAreaElement;
+              
+              // Type the text into the input
+              fireEvent.change(input, { target: { value: inputText } });
+              
+              // Verify text is in the input
+              expect(input.value).toBe(inputText);
+              
+              // Click the appropriate action button
+              const button = actionType === 'expressed' 
+                ? screen.getByLabelText(/express emotion/i)
+                : screen.getByLabelText(/suppress emotion/i);
+              
+              fireEvent.click(button);
+              
+              // Wait for the input to be cleared
+              await waitFor(() => {
+                expect(input.value).toBe('');
+              });
+            } finally {
+              // Cleanup - unmount and remove from DOM
+              unmount();
+              if (container.parentNode) {
+                container.parentNode.removeChild(container);
+              }
+            }
           }
         ),
         { numRuns: 100 }

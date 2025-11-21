@@ -1,7 +1,7 @@
 /**
  * Navigation component
  * Provides navigation links between main and history pages
- * Requirements: 10.3
+ * Requirements: 10.3, 7.5
  */
 
 import Link from 'next/link';
@@ -21,23 +21,28 @@ export interface NavigationProps {
  * 
  * Requirements:
  * - 10.3: Smooth transitions without page reloads (Next.js Link handles this)
+ * - 7.5: Keyboard accessibility with focus indicators
  */
 export function Navigation({ type }: NavigationProps) {
   if (type === 'toHistory') {
     return (
-      <nav className={styles.navigation}>
-        <Link href="/history" className={styles.historyLink}>
-          View History
-        </Link>
-      </nav>
+      <Link 
+        href="/history" 
+        className={styles.historyLink}
+        aria-label="View your emotion log history"
+      >
+        View History
+      </Link>
     );
   }
 
   return (
-    <nav className={styles.navigation}>
-      <Link href="/" className={styles.backLink}>
-        ← Back to Creature
-      </Link>
-    </nav>
+    <Link 
+      href="/" 
+      className={styles.backLink}
+      aria-label="Return to main page with creature"
+    >
+      ← Back to Creature
+    </Link>
   );
 }

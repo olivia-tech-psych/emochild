@@ -1,12 +1,12 @@
 /**
  * Main page - Emotion Log Screen
  * Integrates all components for the primary interface
- * Requirements: 1.1, 2.1, 2.4, 10.1, 10.4
+ * Requirements: 1.1, 2.1, 2.4, 10.1, 10.4, 7.5
  */
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useEmotion } from '@/context/EmotionContext';
 import { EmotionInput } from '@/components/EmotionInput';
 import { ActionButtons } from '@/components/ActionButtons';
@@ -25,6 +25,7 @@ import styles from './page.module.css';
  * - 2.4: Clear input field after submission
  * - 10.1: Emotion log input is immediately accessible
  * - 10.4: Auto-focus cursor for immediate typing
+ * - 7.5: Keyboard accessibility (Tab, Enter, Escape)
  */
 export default function Home() {
   const { creatureState, safetyScore, addLog } = useEmotion();
@@ -48,43 +49,61 @@ export default function Home() {
   const handleExpress = () => handleAction('expressed');
   const handleSuppress = () => handleAction('suppressed');
 
+  // Requirement 7.5: Keyboard accessibility - Escape key clears input
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && inputValue.length > 0) {
+        setInputValue('');
+        e.preventDefault();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [inputValue]);
+
   // Disable buttons when input is empty
   const isButtonDisabled = inputValue.trim().length === 0;
 
   return (
     <main className={styles.main}>
+      {/* Skip to main content link for keyboard users - Requirement 7.5 */}
+      <a href="#emotion-input" className={styles.skipLink}>
+        Skip to emotion input
+      </a>
+
       {/* Creature at top - Requirement 10.1 */}
-      <div className={styles.creatureSection}>
+      <section className={styles.creatureSection} aria-label="Emotionagotchi creature display">
         <Creature state={creatureState} />
-      </div>
+      </section>
 
       {/* Safety bar below creature */}
-      <div className={styles.safetySection}>
+      <section className={styles.safetySection}>
         <SafetyBar score={safetyScore} />
-      </div>
+      </section>
 
       {/* Input in middle - Requirement 1.1, 10.1, 10.4 */}
-      <div className={styles.inputSection}>
+      <section className={styles.inputSection} aria-label="Emotion logging">
         <EmotionInput
           value={inputValue}
           onChange={setInputValue}
           maxLength={maxLength}
         />
-      </div>
+      </section>
 
       {/* Action buttons - Requirement 2.1 */}
-      <div className={styles.actionsSection}>
+      <section className={styles.actionsSection} aria-label="Choose how you processed this emotion">
         <ActionButtons
           onExpress={handleExpress}
           onSuppress={handleSuppress}
           disabled={isButtonDisabled}
         />
-      </div>
+      </section>
 
       {/* Navigation to history */}
-      <div className={styles.navigationSection}>
+      <nav className={styles.navigationSection} aria-label="Page navigation">
         <Navigation type="toHistory" />
-      </div>
+      </nav>
     </main>
   );
 }

@@ -54,12 +54,13 @@ function formatTimestamp(timestamp: number): string {
  * - 6.3: Display empty state message
  * - 6.4: Implement scrolling for long lists
  * - 6.5: Use visual indicators for expressed vs suppressed
+ * - 7.5: Keyboard accessibility and semantic HTML
  */
 export function LogHistory({ logs }: LogHistoryProps) {
   // Requirement 6.3: Empty state message
   if (logs.length === 0) {
     return (
-      <div className={styles.emptyState}>
+      <div className={styles.emptyState} role="status" aria-live="polite">
         <p className={styles.emptyMessage}>
           No emotions logged yet. Start by sharing how you're feeling! 🌱
         </p>
@@ -72,7 +73,11 @@ export function LogHistory({ logs }: LogHistoryProps) {
   
   return (
     <div className={styles.container}>
-      <ul className={styles.logList}>
+      <ul 
+        className={styles.logList}
+        role="list"
+        aria-label={`Emotion log history with ${sortedLogs.length} ${sortedLogs.length === 1 ? 'entry' : 'entries'}`}
+      >
         {sortedLogs.map((log) => (
           <li
             key={log.id}
@@ -80,9 +85,14 @@ export function LogHistory({ logs }: LogHistoryProps) {
             className={`${styles.logItem} ${
               log.action === 'expressed' ? styles.expressed : styles.suppressed
             }`}
+            role="listitem"
           >
             {/* Requirement 6.5: Visual indicator for action type */}
-            <span className={styles.icon} aria-label={log.action}>
+            <span 
+              className={styles.icon} 
+              aria-label={log.action === 'expressed' ? 'Expressed emotion' : 'Suppressed emotion'}
+              role="img"
+            >
               {log.action === 'expressed' ? '🌱' : '🌑'}
             </span>
             

@@ -57,6 +57,17 @@ export function EmotionInput({
     }
   };
 
+  // Handle keyboard events
+  // Note: Enter key submission is handled by parent component via buttons
+  // This prevents accidental submission while typing
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    // Allow Shift+Enter for new lines, but prevent plain Enter from adding newlines
+    // Users should use the Express/Suppress buttons for submission
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+    }
+  };
+
   return (
     <div className={styles.container}>
       <label htmlFor="emotion-input" className={styles.label}>
@@ -69,12 +80,14 @@ export function EmotionInput({
         className={styles.textarea}
         value={value}
         onChange={handleChange}
+        onKeyDown={handleKeyDown}
         maxLength={maxLength}
         disabled={disabled}
         placeholder="Share a feeling..."
         rows={3}
         aria-label="Emotion log input"
         aria-describedby="char-counter"
+        aria-required="true"
       />
       
       {/* Requirement 1.2: Real-time character counter */}
@@ -82,6 +95,7 @@ export function EmotionInput({
         id="char-counter" 
         className={styles.charCounter}
         aria-live="polite"
+        role="status"
       >
         {remainingChars}/{maxLength}
       </div>

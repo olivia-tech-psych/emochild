@@ -1,3 +1,9 @@
+/**
+ * History page - Emotion Log History Screen
+ * Displays all past emotion logs in reverse chronological order
+ * Requirements: 6.1, 6.2, 7.5
+ */
+
 'use client';
 
 import { useEmotion } from '@/context/EmotionContext';
@@ -5,20 +11,30 @@ import { LogHistory } from '@/components/LogHistory';
 import { Navigation } from '@/components/Navigation';
 import styles from './page.module.css';
 
+/**
+ * History page component
+ * 
+ * Requirements:
+ * - 6.1: Display logs in reverse chronological order
+ * - 6.2: Show timestamp, text, and action type
+ * - 7.5: Keyboard accessibility and semantic HTML
+ */
 export default function HistoryPage() {
   const { logs } = useEmotion();
 
   return (
-    <div className={styles.container}>
-      <div className={styles.navigation}>
+    <main className={styles.container}>
+      <nav className={styles.navigation} aria-label="Page navigation">
         <Navigation type="toMain" />
-      </div>
+      </nav>
       
-      <h1 className={styles.title}>Your Emotional Journey</h1>
+      <header>
+        <h1 className={styles.title}>Your Emotional Journey</h1>
+      </header>
       
-      <div className={styles.historyContainer}>
+      <section className={styles.historyContainer} aria-label="Emotion log history">
         <LogHistory logs={logs} />
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }

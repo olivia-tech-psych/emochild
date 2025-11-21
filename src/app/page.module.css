@@ -3,6 +3,25 @@
  * Layout: creature at top, safety bar below, input in middle, actions at bottom
  */
 
+/* Skip link for keyboard accessibility - Requirement 7.5 */
+.skipLink {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--color-mint);
+  color: var(--color-bg-primary);
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 0 0 4px 0;
+  font-weight: 600;
+  z-index: 100;
+  transition: top 0.2s ease;
+}
+
+.skipLink:focus {
+  top: 0;
+}
+
 .main {
   display: flex;
   flex-direction: column;
@@ -10,6 +29,7 @@
   min-height: 100vh;
   padding: var(--spacing-lg);
   gap: var(--spacing-lg);
+  position: relative;
 }
 
 .creatureSection {

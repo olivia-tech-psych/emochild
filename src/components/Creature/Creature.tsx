@@ -43,6 +43,21 @@ export function Creature({ state }: CreatureProps) {
   // Requirement 3.5: Apply scale transform based on creature size
   const scaleValue = 0.8 + (state.size / 100) * 0.4;
 
+  // Create descriptive label for screen readers
+  const getAnimationDescription = () => {
+    switch (state.animation) {
+      case 'grow':
+        return 'growing happily';
+      case 'curl':
+        return 'curling inward';
+      case 'celebrate':
+        return 'celebrating at maximum brightness';
+      case 'idle':
+      default:
+        return 'breathing gently';
+    }
+  };
+
   return (
     <div
       className={`${styles.creature} ${animationClass}`}
@@ -51,7 +66,9 @@ export function Creature({ state }: CreatureProps) {
         transform: `scale(${scaleValue})`,
       }}
       role="img"
-      aria-label={`Emotionagotchi creature with ${state.brightness}% brightness and ${state.animation} animation`}
+      aria-label={`Emotionagotchi creature with ${state.brightness}% brightness, ${getAnimationDescription()}`}
+      aria-live="polite"
+      aria-atomic="true"
     />
   );
 }

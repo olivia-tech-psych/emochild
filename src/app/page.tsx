@@ -30,12 +30,15 @@ import styles from './page.module.css';
 export default function Home() {
   const { creatureState, safetyScore, addLog } = useEmotion();
   const [inputValue, setInputValue] = useState('');
+  const [showEmptyError, setShowEmptyError] = useState(false);
   const maxLength = 100;
 
   // Handle action button clicks
   // Requirement 2.4: Clear input after submission
   const handleAction = (action: EmotionAction) => {
     if (inputValue.trim().length === 0) {
+      // Requirement 1.4: Show validation error for empty input
+      setShowEmptyError(true);
       return; // Prevent empty submissions
     }
 
@@ -44,6 +47,7 @@ export default function Home() {
 
     // Requirement 2.4: Clear input field after submission
     setInputValue('');
+    setShowEmptyError(false);
   };
 
   const handleExpress = () => handleAction('expressed');
@@ -86,8 +90,15 @@ export default function Home() {
       <section className={styles.inputSection} aria-label="Emotion logging">
         <EmotionInput
           value={inputValue}
-          onChange={setInputValue}
+          onChange={(value) => {
+            setInputValue(value);
+            // Clear error when user starts typing
+            if (showEmptyError && value.trim().length > 0) {
+              setShowEmptyError(false);
+            }
+          }}
           maxLength={maxLength}
+          showEmptyError={showEmptyError}
         />
       </section>
 

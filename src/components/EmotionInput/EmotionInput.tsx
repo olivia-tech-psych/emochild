@@ -18,6 +18,8 @@ export interface EmotionInputProps {
   maxLength: number;
   /** Whether the input should be disabled */
   disabled?: boolean;
+  /** Whether to show validation error for empty input */
+  showEmptyError?: boolean;
 }
 
 /**
@@ -34,7 +36,8 @@ export function EmotionInput({
   value, 
   onChange, 
   maxLength,
-  disabled = false 
+  disabled = false,
+  showEmptyError = false
 }: EmotionInputProps) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const remainingChars = maxLength - value.length;
@@ -99,6 +102,17 @@ export function EmotionInput({
       >
         {remainingChars}/{maxLength}
       </div>
+
+      {/* Requirement 1.4: Inline validation message for empty input */}
+      {showEmptyError && value.trim().length === 0 && (
+        <div 
+          className={styles.validationError}
+          role="alert"
+          aria-live="assertive"
+        >
+          Share a feeling to continue
+        </div>
+      )}
     </div>
   );
 }

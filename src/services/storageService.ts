@@ -13,17 +13,29 @@ const STORAGE_KEYS = {
   SAFETY: 'emotionagotchi_safety',
 } as const;
 
+// Track last error for error handling
+let lastError: string | null = null;
+
+/**
+ * Storage operation result
+ */
+export interface StorageResult {
+  success: boolean;
+  error?: string;
+}
+
 /**
  * Storage service interface
  */
 export interface StorageService {
-  saveLogs(logs: EmotionLog[]): void;
+  saveLogs(logs: EmotionLog[]): StorageResult;
   loadLogs(): EmotionLog[];
-  saveCreatureState(state: CreatureState): void;
+  saveCreatureState(state: CreatureState): StorageResult;
   loadCreatureState(): CreatureState | null;
-  saveSafetyScore(score: number): void;
+  saveSafetyScore(score: number): StorageResult;
   loadSafetyScore(): number;
   clearAll(): void;
+  getLastError(): string | null;
 }
 
 /**
@@ -43,24 +55,33 @@ function isLocalStorageAvailable(): boolean {
 /**
  * Save emotion logs to localStorage
  * Requirement 5.1: Persist logs immediately
+ * Requirement 5.4: Handle localStorage failures
  */
-function saveLogs(logs: EmotionLog[]): void {
+function saveLogs(logs: EmotionLog[]): StorageResult {
   try {
     if (!isLocalStorageAvailable()) {
+      lastError = 'Storage is not available - data won\'t persist between sessions';
       console.error('localStorage is not available');
-      return;
+      return { success: false, error: lastError };
     }
     
     const serialized = JSON.stringify(logs);
     localStorage.setItem(STORAGE_KEYS.LOGS, serialized);
+    lastError = null;
+    return { success: true };
   } catch (error) {
     // Requirement 5.4: Handle localStorage failures
     console.error('Failed to save logs to localStorage:', error);
     
     // Check if quota exceeded
     if (error instanceof DOMException && error.name === 'QuotaExceededError') {
+      lastError = 'Storage full - some logs may not save';
       console.error('localStorage quota exceeded');
+    } else {
+      lastError = 'Failed to save data - changes may not persist';
     }
+    
+    return { success: false, error: lastError };
   }
 }
 
@@ -100,19 +121,25 @@ function loadLogs(): EmotionLog[] {
 /**
  * Save creature state to localStorage
  * Requirement 5.1: Persist state immediately
+ * Requirement 5.4: Handle localStorage failures
  */
-function saveCreatureState(state: CreatureState): void {
+function saveCreatureState(state: CreatureState): StorageResult {
   try {
     if (!isLocalStorageAvailable()) {
+      lastError = 'Storage is not available - data won\'t persist between sessions';
       console.error('localStorage is not available');
-      return;
+      return { success: false, error: lastError };
     }
     
     const serialized = JSON.stringify(state);
     localStorage.setItem(STORAGE_KEYS.CREATURE, serialized);
+    lastError = null;
+    return { success: true };
   } catch (error) {
     // Requirement 5.4: Handle localStorage failures
+    lastError = 'Failed to save creature state';
     console.error('Failed to save creature state to localStorage:', error);
+    return { success: false, error: lastError };
   }
 }
 
@@ -152,18 +179,24 @@ function loadCreatureState(): CreatureState | null {
 /**
  * Save safety score to localStorage
  * Requirement 5.1: Persist score immediately
+ * Requirement 5.4: Handle localStorage failures
  */
-function saveSafetyScore(score: number): void {
+function saveSafetyScore(score: number): StorageResult {
   try {
     if (!isLocalStorageAvailable()) {
+      lastError = 'Storage is not available - data won\'t persist between sessions';
       console.error('localStorage is not available');
-      return;
+      return { success: false, error: lastError };
     }
     
     localStorage.setItem(STORAGE_KEYS.SAFETY, score.toString());
+    lastError = null;
+    return { success: true };
   } catch (error) {
     // Requirement 5.4: Handle localStorage failures
+    lastError = 'Failed to save safety score';
     console.error('Failed to save safety score to localStorage:', error);
+    return { success: false, error: lastError };
   }
 }
 
@@ -219,6 +252,13 @@ function clearAll(): void {
 }
 
 /**
+ * Get the last error that occurred
+ */
+function getLastError(): string | null {
+  return lastError;
+}
+
+/**
  * Export the storage service
  */
 export const storageService: StorageService = {
@@ -229,4 +269,5 @@ export const storageService: StorageService = {
   saveSafetyScore,
   loadSafetyScore,
   clearAll,
+  getLastError,
 };

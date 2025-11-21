@@ -50,3 +50,26 @@
   text-align: right;
   padding-right: var(--spacing-xs);
 }
+
+.validationError {
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-peach);
+  text-align: center;
+  padding: var(--spacing-xs);
+  background-color: rgba(255, 212, 163, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 212, 163, 0.3);
+  animation: fadeIn 0.2s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

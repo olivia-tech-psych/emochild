@@ -198,3 +198,8 @@ npm run test:watch
 - Added explicit min-height: 48px to ActionButtons for touch-friendly sizing
 - Ensures buttons meet accessibility standards for mobile touch targets
 - Requirement 7.5: Enhanced touch accessibility for mobile devices
+
+### [2025-11-21 17:15] LogHistory Test Assertions Fix
+- Fixed ARIA label assertions in LogHistory property-based tests to match actual implementation
+- Updated test expectations from 'expressed'/'suppressed' to 'Expressed emotion'/'Suppressed emotion'
+- Ensures test accuracy and alignment with component accessibility features

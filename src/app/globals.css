@@ -29,6 +29,16 @@
   --transition-fast: 0.2s ease;
   --transition-medium: 0.5s ease;
   --transition-slow: 1s ease;
+  
+  /* Typography */
+  --font-size-heading: 24px;
+  --font-size-body: 16px;
+  --font-size-small: 14px;
+  --font-size-tiny: 12px;
+  
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
 }
 
 * {

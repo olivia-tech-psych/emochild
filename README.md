@@ -1,5 +1,5 @@
-# emotionagotchi-app
-Emotionagotchi is a modern resurrection of the classic Tamagotchi (1996 digital pet), brought back with a new purpose:  you don’t feed it, clean it, or keep it alive. Instead, your creature grows every time you emotionally regulate, express, validate, or process a feeling. It’s a digital companion designed to mirror your emotional life.
+# emochild
+EmoChild is a modern resurrection of the classic Tamagotchi (1996 digital pet), brought back with a new purpose:  you don’t feed it, clean it, or keep it alive. Instead, your creature grows every time you emotionally regulate, express, validate, or process a feeling. It’s a digital companion designed to mirror your emotional life.
 
 
 ## Current Features Implemented
@@ -21,7 +21,7 @@ Emotionagotchi is a modern resurrection of the classic Tamagotchi (1996 digital 
 ## File Structure Overview
 
 ```
-emotionagotchi-app/
+emochild/
 ├── src/
 │   ├── app/
 │   │   ├── globals.css         # Theme variables and global styles
@@ -76,9 +76,9 @@ emotionagotchi-app/
 
 This project is being developed using **Kiro Specs**, a structured approach to building features:
 
-- **Requirements Document** (`.kiro/specs/emotionagotchi/requirements.md`): Defines 10 user stories with acceptance criteria
-- **Design Document** (`.kiro/specs/emotionagotchi/design.md`): Specifies architecture, components, and 12 correctness properties for property-based testing
-- **Tasks Document** (`.kiro/specs/emotionagotchi/tasks.md`): Breaks implementation into 20 incremental tasks
+- **Requirements Document** (`.kiro/specs/emochild/requirements.md`): Defines 10 user stories with acceptance criteria
+- **Design Document** (`.kiro/specs/emochild/design.md`): Specifies architecture, components, and 12 correctness properties for property-based testing
+- **Tasks Document** (`.kiro/specs/emochild/tasks.md`): Breaks implementation into 20 incremental tasks
 
 The spec-driven approach ensures:
 - Clear requirements traceability

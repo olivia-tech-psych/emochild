@@ -36,7 +36,7 @@ describe('storageService', () => {
     });
 
     it('should handle corrupted data gracefully', () => {
-      localStorage.setItem('emotionagotchi_logs', 'invalid json');
+      localStorage.setItem('emochild_logs', 'invalid json');
       const loaded = storageService.loadLogs();
       expect(loaded).toEqual([]);
     });
@@ -62,7 +62,7 @@ describe('storageService', () => {
     });
 
     it('should handle corrupted data gracefully', () => {
-      localStorage.setItem('emotionagotchi_creature', 'invalid json');
+      localStorage.setItem('emochild_creature', 'invalid json');
       const loaded = storageService.loadCreatureState();
       expect(loaded).toBeNull();
     });
@@ -82,7 +82,7 @@ describe('storageService', () => {
     });
 
     it('should handle corrupted data gracefully', () => {
-      localStorage.setItem('emotionagotchi_safety', 'not a number');
+      localStorage.setItem('emochild_safety', 'not a number');
       const loaded = storageService.loadSafetyScore();
       expect(loaded).toBe(0);
     });
@@ -238,37 +238,37 @@ describe('storageService', () => {
 
     describe('corrupted data recovery', () => {
       it('should handle non-array data in logs', () => {
-        localStorage.setItem('emotionagotchi_logs', '{"not": "an array"}');
+        localStorage.setItem('emochild_logs', '{"not": "an array"}');
         const loaded = storageService.loadLogs();
         expect(loaded).toEqual([]);
       });
 
       it('should handle invalid JSON in logs', () => {
-        localStorage.setItem('emotionagotchi_logs', 'not valid json {]');
+        localStorage.setItem('emochild_logs', 'not valid json {]');
         const loaded = storageService.loadLogs();
         expect(loaded).toEqual([]);
       });
 
       it('should handle invalid creature state structure', () => {
-        localStorage.setItem('emotionagotchi_creature', '{"invalid": "structure"}');
+        localStorage.setItem('emochild_creature', '{"invalid": "structure"}');
         const loaded = storageService.loadCreatureState();
         expect(loaded).toBeNull();
       });
 
       it('should handle invalid JSON in creature state', () => {
-        localStorage.setItem('emotionagotchi_creature', 'not valid json {]');
+        localStorage.setItem('emochild_creature', 'not valid json {]');
         const loaded = storageService.loadCreatureState();
         expect(loaded).toBeNull();
       });
 
       it('should handle non-numeric safety score', () => {
-        localStorage.setItem('emotionagotchi_safety', 'not a number');
+        localStorage.setItem('emochild_safety', 'not a number');
         const loaded = storageService.loadSafetyScore();
         expect(loaded).toBe(0);
       });
 
       it('should handle invalid safety score format', () => {
-        localStorage.setItem('emotionagotchi_safety', '{"not": "a number"}');
+        localStorage.setItem('emochild_safety', '{"not": "a number"}');
         const loaded = storageService.loadSafetyScore();
         expect(loaded).toBe(0);
       });

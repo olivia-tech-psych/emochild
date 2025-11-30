@@ -21,13 +21,13 @@ describe('Accessibility Features - Requirement 7.5', () => {
   describe('ARIA labels and semantic HTML', () => {
     it('should have proper ARIA labels on creature component', () => {
       renderWithProvider();
-      const creature = screen.getByRole('img', { name: /emotionagotchi creature/i });
+      const creature = screen.getByRole('img', { name: /emochild creature/i });
       expect(creature).toBeDefined();
     });
 
     it('should have ARIA live region on creature for dynamic updates', () => {
       renderWithProvider();
-      const creature = screen.getByRole('img', { name: /emotionagotchi creature/i });
+      const creature = screen.getByRole('img', { name: /emochild creature/i });
       expect(creature.getAttribute('aria-live')).toBe('polite');
     });
 

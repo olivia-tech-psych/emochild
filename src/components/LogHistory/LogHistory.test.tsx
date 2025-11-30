@@ -10,7 +10,7 @@ import { LogHistory } from './LogHistory';
 import { EmotionLog } from '@/types';
 
 /**
- * Feature: emotionagotchi, Property 8: Log history chronological ordering
+ * Feature: emochild, Property 8: Log history chronological ordering
  * For any set of emotion logs, when displayed in the history view, 
  * they should appear in reverse chronological order (newest first) based on their timestamps.
  * Validates: Requirements 6.1
@@ -62,7 +62,7 @@ describe('Property 8: Log history chronological ordering', () => {
 });
 
 /**
- * Feature: emotionagotchi, Property 9: Log display completeness
+ * Feature: emochild, Property 9: Log display completeness
  * For any emotion log displayed in the history, the rendered output should contain 
  * the timestamp, the emotion text, and a visual indicator of the action type.
  * Validates: Requirements 6.2, 6.5

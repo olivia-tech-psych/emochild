@@ -1,5 +1,5 @@
 /**
- * EmotionContext - Global state management for Emotionagotchi
+ * EmotionContext - Global state management for EmoChild
  * Manages emotion logs, creature state, and safety score
  * Requirements: 2.2, 2.3, 4.1, 5.1, 5.2
  */

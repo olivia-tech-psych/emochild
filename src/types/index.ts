@@ -1,5 +1,5 @@
 /**
- * Type definitions for Emotionagotchi application
+ * Type definitions for EmoChild application
  * These types define the core data models used throughout the application
  */
 
@@ -29,7 +29,7 @@ export interface EmotionLog {
 }
 
 /**
- * Represents the current state of the Emotionagotchi creature
+ * Represents the current state of the EmoChild creature
  * Requirements: 3.1, 3.2
  */
 export interface CreatureState {

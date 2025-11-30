@@ -1,5 +1,5 @@
 /**
- * Storage Service for Emotionagotchi
+ * Storage Service for EmoChild
  * Handles all localStorage operations with error handling
  * Requirements: 5.1, 5.2, 5.4
  */
@@ -8,9 +8,9 @@ import { EmotionLog, CreatureState } from '@/types';
 
 // Storage keys
 const STORAGE_KEYS = {
-  LOGS: 'emotionagotchi_logs',
-  CREATURE: 'emotionagotchi_creature',
-  SAFETY: 'emotionagotchi_safety',
+  LOGS: 'emochild_logs',
+  CREATURE: 'emochild_creature',
+  SAFETY: 'emochild_safety',
 } as const;
 
 // Track last error for error handling

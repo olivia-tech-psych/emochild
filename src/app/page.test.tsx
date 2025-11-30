@@ -54,7 +54,7 @@ describe('Home Page', () => {
   });
 
   /**
-   * Feature: emotionagotchi, Property 3: Input clearing after submission
+   * Feature: emochild, Property 3: Input clearing after submission
    * For any emotion log submission (expressed or suppressed), 
    * the input field should be empty immediately after the action completes.
    * 
@@ -114,7 +114,7 @@ describe('Home Page', () => {
   });
 
   /**
-   * Feature: emotionagotchi, Property 12: No external network requests
+   * Feature: emochild, Property 12: No external network requests
    * For any user interaction with the application, 
    * the browser should not make HTTP requests to external servers for user data operations.
    * 

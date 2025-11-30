@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import fc from 'fast-check';
 
 /**
- * Feature: emotionagotchi, Property 10: Text contrast accessibility
+ * Feature: emochild, Property 10: Text contrast accessibility
  * For any text element displayed on the dark background, the contrast ratio 
  * between text color and background color should meet WCAG AA standards 
  * (minimum 4.5:1 for normal text).

@@ -3,7 +3,7 @@ import './globals.css'
 import { EmotionProvider } from '@/context/EmotionContext'
 
 export const metadata: Metadata = {
-  title: 'Emotionagotchi',
+  title: 'EmoChild',
   description: 'Your emotional wellness companion',
 }
 

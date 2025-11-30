@@ -1,6 +1,6 @@
 /**
  * Creature Component
- * Displays the animated Emotionagotchi creature that responds to user's emotional processing
+ * Displays the animated EmoChild creature that responds to user's emotional processing
  * Requirements: 3.1, 3.2, 3.4, 3.5, 8.1, 8.2, 8.3, 8.4
  */
 
@@ -101,7 +101,7 @@ export function Creature({ state }: CreatureProps) {
         transform: `scale(${scaleValue})`,
       }}
       role="img"
-      aria-label={`Emotionagotchi creature with ${state.brightness}% brightness, ${getAnimationDescription()}`}
+      aria-label={`EmoChild creature with ${state.brightness}% brightness, ${getAnimationDescription()}`}
       aria-live="polite"
       aria-atomic="true"
     />

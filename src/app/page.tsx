@@ -77,7 +77,7 @@ export default function Home() {
       </a>
 
       {/* Creature at top - Requirement 10.1 */}
-      <section className={styles.creatureSection} aria-label="Emotionagotchi creature display">
+      <section className={styles.creatureSection} aria-label="EmoChild creature display">
         <Creature state={creatureState} />
       </section>
 

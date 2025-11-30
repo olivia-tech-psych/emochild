@@ -9,7 +9,7 @@ import { calculateNewState, getInitialState } from './creatureState';
 import { CreatureState, EmotionAction } from '@/types';
 
 /**
- * Feature: emotionagotchi, Property 4: Creature brightness responds to actions
+ * Feature: emochild, Property 4: Creature brightness responds to actions
  * For any sequence of emotion logs, the creature brightness should increase by 5 
  * for each "expressed" action and decrease by 3 for each "suppressed" action, 
  * bounded between 0 and 100.

@@ -128,35 +128,58 @@
 }
 
 /* Bow accessory - Requirement 6.2 */
+/* Styled to look like 🎀 emoji with ribbon loops */
 .bow {
   position: absolute;
-  top: 10%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 30px;
-  height: 20px;
-  background: #C11C84;  /* Dark pink bow color */
-  border-radius: 50% 50% 0 0;
+  top: 15%;
+  right: 15%;  /* Right side of creature's head (user's left side) */
+  width: 28px;
+  height: 28px;
   z-index: 10;
 }
 
-.bow::before,
+/* Center knot of the bow */
+.bow::before {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 12px;
+  background: #C11C84;  /* Dark pink bow color */
+  border-radius: 20%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  z-index: 3;
+}
+
+/* Left loop of the bow */
 .bow::after {
   content: '';
   position: absolute;
-  width: 15px;
-  height: 15px;
-  background: #C11C84;  /* Dark pink bow color */
-  border-radius: 50%;
-  top: 0;
+  width: 16px;
+  height: 20px;
+  background: #D63A9D;  /* Slightly lighter pink for depth */
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  top: 50%;
+  left: -6px;
+  transform: translateY(-50%) rotate(-15deg);
+  box-shadow: inset -2px -2px 4px rgba(0, 0, 0, 0.15);
+  z-index: 1;
 }
 
-.bow::before {
-  left: -12px;
-}
-
-.bow::after {
-  right: -12px;
+/* Right loop of the bow */
+.bowRightLoop {
+  position: absolute;
+  width: 16px;
+  height: 20px;
+  background: #D63A9D;  /* Slightly lighter pink for depth */
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  top: 50%;
+  right: -6px;
+  transform: translateY(-50%) rotate(15deg);
+  box-shadow: inset 2px -2px 4px rgba(0, 0, 0, 0.15);
+  z-index: 1;
 }
 
 /* Responsive design for mobile - Requirement 7.5 */
@@ -173,22 +196,23 @@
   }
   
   .bow {
-    width: 25px;
-    height: 17px;
-  }
-  
-  .bow::before,
-  .bow::after {
-    width: 12px;
-    height: 12px;
+    width: 24px;
+    height: 24px;
   }
   
   .bow::before {
-    left: -10px;
+    width: 8px;
+    height: 10px;
   }
   
   .bow::after {
-    right: -10px;
+    width: 14px;
+    height: 17px;
+  }
+  
+  .bowRightLoop {
+    width: 14px;
+    height: 17px;
   }
 }
 
@@ -206,20 +230,21 @@
   
   .bow {
     width: 20px;
-    height: 14px;
-  }
-  
-  .bow::before,
-  .bow::after {
-    width: 10px;
-    height: 10px;
+    height: 20px;
   }
   
   .bow::before {
-    left: -8px;
+    width: 7px;
+    height: 8px;
   }
   
   .bow::after {
-    right: -8px;
+    width: 12px;
+    height: 14px;
+  }
+  
+  .bowRightLoop {
+    width: 12px;
+    height: 14px;
   }
 }

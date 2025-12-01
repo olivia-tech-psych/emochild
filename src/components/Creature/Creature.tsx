@@ -122,7 +122,9 @@ export function Creature({ state, customization }: CreatureProps) {
       />
       {/* Requirement 6.2: Render dark pink bow if hasBow is true */}
       {customization.hasBow && (
-        <div className={styles.bow} aria-hidden="true" />
+        <div className={styles.bow} aria-hidden="true">
+          <div className={styles.bowRightLoop} />
+        </div>
       )}
     </div>
   );

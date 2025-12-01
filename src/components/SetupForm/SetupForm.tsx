@@ -106,7 +106,9 @@ export function SetupForm({ onComplete }: SetupFormProps) {
           >
             {/* Bow accessory preview */}
             {hasBow && (
-              <div className={styles.previewBow} aria-hidden="true" />
+              <div className={styles.previewBow} aria-hidden="true">
+                <div className={styles.previewBowRightLoop} />
+              </div>
             )}
           </div>
         </div>

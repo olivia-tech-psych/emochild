@@ -1,7 +1,7 @@
 /**
  * History page - Emotion Log History Screen
  * Displays all past emotion logs in reverse chronological order
- * Requirements: 6.1, 6.2, 7.5
+ * Requirements: 6.1, 6.2, 7.2, 7.3, 7.5
  */
 
 'use client';
@@ -17,10 +17,12 @@ import styles from './page.module.css';
  * Requirements:
  * - 6.1: Display logs in reverse chronological order
  * - 6.2: Show timestamp, text, and action type
+ * - 7.2: Show emoji based on action type
+ * - 7.3: Handle deletion through context with confirmation dialog
  * - 7.5: Keyboard accessibility and semantic HTML
  */
 export default function HistoryPage() {
-  const { logs } = useEmotion();
+  const { logs, deleteLog } = useEmotion();
 
   return (
     <main className={styles.container}>
@@ -33,7 +35,7 @@ export default function HistoryPage() {
       </header>
       
       <section className={styles.historyContainer} aria-label="Emotion log history">
-        <LogHistory logs={logs} />
+        <LogHistory logs={logs} onDelete={deleteLog} />
       </section>
     </main>
   );

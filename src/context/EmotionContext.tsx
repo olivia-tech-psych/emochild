@@ -15,7 +15,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Context type definition
- * Requirements: 2.6, 4.3, 5.1, 5.2, 7.3, 7.5, 8.2, 8.4
+ * Requirements: 2.6, 4.3, 5.1, 5.2, 7.3, 7.5, 8.2, 8.4, 8.5
  */
 interface EmotionContextType {
   logs: EmotionLog[];
@@ -202,6 +202,7 @@ export function EmotionProvider({ children }: EmotionProviderProps) {
    * Requirements:
    * - 2.6: Save creature customization
    * - 8.4: Persist customization to localStorage immediately
+   * - 8.5: Ensure all customization changes save immediately
    */
   const setCustomization = useCallback((newCustomization: CreatureCustomization) => {
     setCustomizationState(newCustomization);
@@ -261,6 +262,7 @@ export function EmotionProvider({ children }: EmotionProviderProps) {
    * 
    * Requirements:
    * - 8.2: Store last selected text color and restore for next log
+   * - 8.5: Update localStorage on any setting change
    */
   const setTextColorPreference = useCallback((color: PastelColor | 'white') => {
     setTextColorPreferenceState(color);

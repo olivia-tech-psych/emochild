@@ -260,6 +260,7 @@ function loadSafetyScore(): number {
  * Requirement 2.6: Save creature name and color
  * Requirement 8.1: Save customization settings
  * Requirement 8.4: Persist customization on completion
+ * Requirement 8.5: Update localStorage immediately on any setting change
  */
 function saveCustomization(customization: CreatureCustomization): StorageResult {
   try {
@@ -374,6 +375,7 @@ function loadMicroSentenceIndex(): number {
 /**
  * Save text color preference to localStorage
  * Requirement 8.2: Remember text color preference for next log
+ * Requirement 8.5: Update localStorage immediately on any setting change
  */
 function saveTextColorPreference(color: string): StorageResult {
   try {

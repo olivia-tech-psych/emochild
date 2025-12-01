@@ -16,6 +16,7 @@ EmoChild is a modern resurrection of the classic Tamagotchi (1996 digital pet), 
 - **Creature Component**: Animated blob creature with four animation states (idle, grow, curl, celebrate), dynamic brightness filtering, and size scaling based on emotional state
 - **SafetyBar Component**: Progress bar displaying inner safety score with mint-colored fill, smooth growth animation, and numeric score display
 - **ColorPicker Component**: Reusable color selector with 8 pastel color swatches plus optional white, keyboard navigation, and accessibility features for creature and text color customization
+- **LandingHero Component**: Welcoming landing page hero section with app name, explanation text with pastel glow effect, and Start button with mint accent color and responsive design
 - **LogHistory Component**: Displays emotion logs in reverse chronological order with human-readable timestamps, visual indicators for expressed/suppressed actions, empty state handling, and scrollable list
 - **Navigation Component**: Provides navigation links between main and history pages with smooth transitions using Next.js Link component, styled with pastel colors and focus indicators
 - **Property-Based Testing**: fast-check integration for testing creature brightness calculations and text contrast accessibility
@@ -39,6 +40,10 @@ emochild/
 │   │   │   ├── ColorPicker.tsx
 │   │   │   ├── ColorPicker.test.tsx
 │   │   │   ├── ColorPicker.module.css
+│   │   │   └── index.ts
+│   │   ├── LandingHero/        # Landing page hero section
+│   │   │   ├── LandingHero.tsx
+│   │   │   ├── LandingHero.module.css
 │   │   │   └── index.ts
 │   │   ├── Creature/           # Animated creature component
 │   │   │   ├── Creature.tsx
@@ -245,3 +250,15 @@ npm run test:watch
 - Comprehensive unit tests covering color selection, keyboard navigation, and accessibility
 - Completed Task 7 from emochild-v2 implementation plan
 - Requirements: 2.4, 4.1, 4.2
+
+### [2025-12-01 16:00] LandingHero Component Implementation
+- Implemented LandingHero component as welcoming entry point for the application
+- Displays app name "EmoChild: Your Inner Child in Your Pocket" with prominent heading
+- Shows explanation text with soft pastel glow effect using mint color text-shadow
+- Renders "Start" button with mint accent color and glow effect
+- Includes hover, focus, and active states for interactive feedback
+- Responsive design with breakpoints for tablets (768px), mobile (600px), and small mobile (400px)
+- Accessibility features including ARIA labels, keyboard focus indicators, and reduced motion support
+- High contrast mode support for improved accessibility
+- Completed Task 8 from emochild-v2 implementation plan
+- Requirements: 1.1, 1.2, 1.3, 1.5

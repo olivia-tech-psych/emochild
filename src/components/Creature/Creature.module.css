@@ -1,17 +1,22 @@
 /**
  * Creature Component Styles
  * Implements all creature animations and visual effects
- * Requirements: 3.1, 3.2, 3.4, 3.5, 8.1, 8.2, 8.3, 8.4
+ * Requirements: 3.1, 3.2, 3.4, 3.5, 6.1, 6.2, 6.3, 6.4, 6.5, 8.1, 8.2, 8.3, 8.4
  */
+
+.creatureContainer {
+  position: relative;
+  display: inline-block;
+}
 
 .creature {
   width: 120px;
   height: 120px;
   border-radius: 50% 50% 45% 45%;
-  background: radial-gradient(circle, var(--color-mint), var(--color-lavender));
-  box-shadow: var(--glow-mint);
+  /* Requirement 6.1, 6.3: Background and box-shadow now set via inline styles from customization */
   position: relative;
   /* Requirement 8.2, 8.3: Smooth transitions for all state changes */
+  /* Requirement 6.4, 6.5: Transitions maintain color while dimming/brightening */
   transition: 
     filter var(--transition-slow),
     transform var(--transition-slow),
@@ -122,6 +127,38 @@
   box-shadow: var(--glow-mint), var(--glow-lavender);
 }
 
+/* Bow accessory - Requirement 6.2 */
+.bow {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 20px;
+  background: #C11C84;  /* Dark pink bow color */
+  border-radius: 50% 50% 0 0;
+  z-index: 10;
+}
+
+.bow::before,
+.bow::after {
+  content: '';
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  background: #C11C84;  /* Dark pink bow color */
+  border-radius: 50%;
+  top: 0;
+}
+
+.bow::before {
+  left: -12px;
+}
+
+.bow::after {
+  right: -12px;
+}
+
 /* Responsive design for mobile - Requirement 7.5 */
 @media (max-width: 600px) {
   .creature {
@@ -133,6 +170,25 @@
   .creature::after {
     width: 10px;
     height: 10px;
+  }
+  
+  .bow {
+    width: 25px;
+    height: 17px;
+  }
+  
+  .bow::before,
+  .bow::after {
+    width: 12px;
+    height: 12px;
+  }
+  
+  .bow::before {
+    left: -10px;
+  }
+  
+  .bow::after {
+    right: -10px;
   }
 }
 
@@ -146,5 +202,24 @@
   .creature::after {
     width: 8px;
     height: 8px;
+  }
+  
+  .bow {
+    width: 20px;
+    height: 14px;
+  }
+  
+  .bow::before,
+  .bow::after {
+    width: 10px;
+    height: 10px;
+  }
+  
+  .bow::before {
+    left: -8px;
+  }
+  
+  .bow::after {
+    right: -8px;
   }
 }

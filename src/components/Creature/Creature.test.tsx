@@ -1,15 +1,21 @@
 /**
  * Unit tests for Creature component
- * Tests animation states, brightness, and size transforms
- * Requirements: 3.1, 3.2, 8.1
+ * Tests animation states, brightness, size transforms, and customization
+ * Requirements: 3.1, 3.2, 6.1, 6.2, 6.3, 8.1
  */
 
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Creature } from './Creature';
-import { CreatureState } from '@/types';
+import { CreatureState, CreatureCustomization } from '@/types';
 
 describe('Creature Component', () => {
+  const defaultCustomization: CreatureCustomization = {
+    name: 'TestCreature',
+    color: 'orange',
+    hasBow: false,
+  };
+
   describe('Animation States', () => {
     it('should apply idle animation class when animation is idle', () => {
       const state: CreatureState = {
@@ -18,7 +24,7 @@ describe('Creature Component', () => {
         animation: 'idle',
       };
 
-      render(<Creature state={state} />);
+      render(<Creature state={state} customization={defaultCustomization} />);
       const creature = screen.getByRole('img');
       
       expect(creature.className).toContain('creatureIdle');
@@ -31,7 +37,7 @@ describe('Creature Component', () => {
         animation: 'grow',
       };
 
-      render(<Creature state={state} />);
+      render(<Creature state={state} customization={defaultCustomization} />);
       const creature = screen.getByRole('img');
       
       expect(creature.className).toContain('creatureGrow');
@@ -44,7 +50,7 @@ describe('Creature Component', () => {
         animation: 'curl',
       };
 
-      render(<Creature state={state} />);
+      render(<Creature state={state} customization={defaultCustomization} />);
       const creature = screen.getByRole('img');
       
       expect(creature.className).toContain('creatureCurl');
@@ -57,7 +63,7 @@ describe('Creature Component', () => {
         animation: 'celebrate',
       };
 
-      render(<Creature state={state} />);
+      render(<Creature state={state} customization={defaultCustomization} />);
       const creature = screen.getByRole('img');
       
       expect(creature.className).toContain('creatureCelebrate');
@@ -72,7 +78,7 @@ describe('Creature Component', () => {
         animation: 'idle',
       };
 
-      render(<Creature state={state} />);
+      render(<Creature state={state} customization={defaultCustomization} />);
       const creature = screen.getByRole('img');
       
       // brightness 0 should map to filter brightness(0.5)
@@ -86,7 +92,7 @@ describe('Creature Component', () => {
         animation: 'idle',
       };
 
-      render(<Creature state={state} />);
+      render(<Creature state={state} customization={defaultCustomization} />);
       const creature = screen.getByRole('img');
       
       // brightness 50 should map to filter brightness(1)
@@ -100,7 +106,7 @@ describe('Creature Component', () => {
         animation: 'idle',
       };
 
-      render(<Creature state={state} />);
+      render(<Creature state={state} customization={defaultCustomization} />);
       const creature = screen.getByRole('img');
       
       // brightness 100 should map to filter brightness(1.5)
@@ -116,7 +122,7 @@ describe('Creature Component', () => {
         animation: 'idle',
       };
 
-      render(<Creature state={state} />);
+      render(<Creature state={state} customization={defaultCustomization} />);
       const creature = screen.getByRole('img');
       
       // size 0 should map to scale(0.8)
@@ -130,7 +136,7 @@ describe('Creature Component', () => {
         animation: 'idle',
       };
 
-      render(<Creature state={state} />);
+      render(<Creature state={state} customization={defaultCustomization} />);
       const creature = screen.getByRole('img');
       
       // size 50 should map to scale(1)
@@ -144,11 +150,134 @@ describe('Creature Component', () => {
         animation: 'idle',
       };
 
-      render(<Creature state={state} />);
+      render(<Creature state={state} customization={defaultCustomization} />);
       const creature = screen.getByRole('img');
       
       // size 100 should map to scale(1.2) - using toContain to handle floating point precision
       expect(creature.style.transform).toContain('scale(1.2');
+    });
+  });
+
+  describe('Customization', () => {
+    it('should apply custom color to creature background', () => {
+      const state: CreatureState = {
+        brightness: 50,
+        size: 50,
+        animation: 'idle',
+      };
+      const customization: CreatureCustomization = {
+        name: 'Bluey',
+        color: 'blue',
+        hasBow: false,
+      };
+
+      render(<Creature state={state} customization={customization} />);
+      const creature = screen.getByRole('img');
+      
+      // Should have blue color applied (browser converts hex to rgb)
+      expect(creature.style.background).toBe('rgb(160, 210, 235)');
+    });
+
+    it('should apply custom glow effect based on color', () => {
+      const state: CreatureState = {
+        brightness: 50,
+        size: 50,
+        animation: 'idle',
+      };
+      const customization: CreatureCustomization = {
+        name: 'Minty',
+        color: 'mint',
+        hasBow: false,
+      };
+
+      render(<Creature state={state} customization={customization} />);
+      const creature = screen.getByRole('img');
+      
+      // Should have mint glow applied
+      expect(creature.style.boxShadow).toContain('rgba(201, 228, 222, 0.6)');
+    });
+
+    it('should render bow when hasBow is true', () => {
+      const state: CreatureState = {
+        brightness: 50,
+        size: 50,
+        animation: 'idle',
+      };
+      const customization: CreatureCustomization = {
+        name: 'Bowie',
+        color: 'pink',
+        hasBow: true,
+      };
+
+      const { container } = render(<Creature state={state} customization={customization} />);
+      const bow = container.querySelector('[class*="bow"]');
+      
+      expect(bow).toBeInTheDocument();
+    });
+
+    it('should not render bow when hasBow is false', () => {
+      const state: CreatureState = {
+        brightness: 50,
+        size: 50,
+        animation: 'idle',
+      };
+      const customization: CreatureCustomization = {
+        name: 'NoBow',
+        color: 'lavender',
+        hasBow: false,
+      };
+
+      const { container } = render(<Creature state={state} customization={customization} />);
+      const bow = container.querySelector('[class*="bow"]');
+      
+      expect(bow).not.toBeInTheDocument();
+    });
+
+    it('should include creature name in aria-label', () => {
+      const state: CreatureState = {
+        brightness: 75,
+        size: 60,
+        animation: 'grow',
+      };
+      const customization: CreatureCustomization = {
+        name: 'Sparkles',
+        color: 'yellow',
+        hasBow: true,
+      };
+
+      render(<Creature state={state} customization={customization} />);
+      const creature = screen.getByRole('img');
+      
+      expect(creature.getAttribute('aria-label')).toContain('Sparkles');
+      expect(creature.getAttribute('aria-label')).toContain('yellow');
+    });
+
+    it('should maintain color through different brightness states', () => {
+      const customization: CreatureCustomization = {
+        name: 'Peachy',
+        color: 'peach',
+        hasBow: false,
+      };
+
+      // Test with low brightness
+      const { rerender, container } = render(
+        <Creature 
+          state={{ brightness: 20, size: 50, animation: 'idle' }} 
+          customization={customization} 
+        />
+      );
+      let creature = screen.getByRole('img');
+      expect(creature.style.background).toBe('rgb(252, 222, 211)'); // peach color
+
+      // Test with high brightness
+      rerender(
+        <Creature 
+          state={{ brightness: 80, size: 50, animation: 'idle' }} 
+          customization={customization} 
+        />
+      );
+      creature = screen.getByRole('img');
+      expect(creature.style.background).toBe('rgb(252, 222, 211)'); // still peach color
     });
   });
 
@@ -160,7 +289,7 @@ describe('Creature Component', () => {
         animation: 'grow',
       };
 
-      render(<Creature state={state} />);
+      render(<Creature state={state} customization={defaultCustomization} />);
       const creature = screen.getByRole('img');
       
       expect(creature).toHaveAttribute('aria-label');

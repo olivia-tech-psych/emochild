@@ -4,13 +4,15 @@
  * Requirements: 5.1, 5.2, 5.4
  */
 
-import { EmotionLog, CreatureState } from '@/types';
+import { EmotionLog, CreatureState, CreatureCustomization } from '@/types';
 
 // Storage keys
 const STORAGE_KEYS = {
   LOGS: 'emochild_logs',
   CREATURE: 'emochild_creature',
   SAFETY: 'emochild_safety',
+  CUSTOMIZATION: 'emochild_customization',
+  MICRO_INDEX: 'emochild_micro_index',
 } as const;
 
 // Track last error for error handling
@@ -34,6 +36,10 @@ export interface StorageService {
   loadCreatureState(): CreatureState | null;
   saveSafetyScore(score: number): StorageResult;
   loadSafetyScore(): number;
+  saveCustomization(customization: CreatureCustomization): StorageResult;
+  loadCustomization(): CreatureCustomization | null;
+  saveMicroSentenceIndex(index: number): StorageResult;
+  loadMicroSentenceIndex(): number;
   clearAll(): void;
   getLastError(): string | null;
 }
@@ -56,6 +62,8 @@ function isLocalStorageAvailable(): boolean {
  * Save emotion logs to localStorage
  * Requirement 5.1: Persist logs immediately
  * Requirement 5.4: Handle localStorage failures
+ * Requirement 4.3: Save textColor and quickEmotion fields
+ * Requirement 8.3: Handle new fields in logs
  */
 function saveLogs(logs: EmotionLog[]): StorageResult {
   try {
@@ -88,6 +96,8 @@ function saveLogs(logs: EmotionLog[]): StorageResult {
 /**
  * Load emotion logs from localStorage
  * Requirement 5.2: Load previous logs on return
+ * Requirement 8.3: Migrate existing logs without new fields
+ * Requirement 8.4: Default textColor to white for existing logs
  */
 function loadLogs(): EmotionLog[] {
   try {
@@ -110,7 +120,17 @@ function loadLogs(): EmotionLog[] {
       return [];
     }
     
-    return logs;
+    // Requirement 8.3, 8.4: Migrate existing logs without new fields
+    const migratedLogs = logs.map((log: any) => {
+      // Ensure textColor defaults to 'white' if not present
+      if (!log.textColor) {
+        log.textColor = 'white';
+      }
+      // quickEmotion remains undefined if not present (optional field)
+      return log as EmotionLog;
+    });
+    
+    return migratedLogs;
   } catch (error) {
     // Requirement 5.4: Handle corrupted data
     console.error('Failed to load logs from localStorage:', error);
@@ -233,6 +253,122 @@ function loadSafetyScore(): number {
 }
 
 /**
+ * Save creature customization to localStorage
+ * Requirement 2.6: Save creature name and color
+ * Requirement 8.1: Save customization settings
+ * Requirement 8.4: Persist customization on completion
+ */
+function saveCustomization(customization: CreatureCustomization): StorageResult {
+  try {
+    if (!isLocalStorageAvailable()) {
+      lastError = 'Storage is not available - data won\'t persist between sessions';
+      console.error('localStorage is not available');
+      return { success: false, error: lastError };
+    }
+    
+    const serialized = JSON.stringify(customization);
+    localStorage.setItem(STORAGE_KEYS.CUSTOMIZATION, serialized);
+    lastError = null;
+    return { success: true };
+  } catch (error) {
+    // Requirement 5.4: Handle localStorage failures
+    lastError = 'Failed to save customization';
+    console.error('Failed to save customization to localStorage:', error);
+    return { success: false, error: lastError };
+  }
+}
+
+/**
+ * Load creature customization from localStorage
+ * Requirement 8.4: Restore customization settings on load
+ */
+function loadCustomization(): CreatureCustomization | null {
+  try {
+    if (!isLocalStorageAvailable()) {
+      console.error('localStorage is not available');
+      return null;
+    }
+    
+    const serialized = localStorage.getItem(STORAGE_KEYS.CUSTOMIZATION);
+    
+    if (!serialized) {
+      return null;
+    }
+    
+    const customization = JSON.parse(serialized);
+    
+    // Basic validation
+    if (typeof customization.name !== 'string' || 
+        typeof customization.color !== 'string' || 
+        typeof customization.hasBow !== 'boolean') {
+      console.error('Invalid customization data in localStorage');
+      return null;
+    }
+    
+    return customization;
+  } catch (error) {
+    // Requirement 5.4: Handle corrupted data
+    console.error('Failed to load customization from localStorage:', error);
+    return null;
+  }
+}
+
+/**
+ * Save micro-sentence index to localStorage
+ * Requirement 8.1: Persist micro-sentence index
+ */
+function saveMicroSentenceIndex(index: number): StorageResult {
+  try {
+    if (!isLocalStorageAvailable()) {
+      lastError = 'Storage is not available - data won\'t persist between sessions';
+      console.error('localStorage is not available');
+      return { success: false, error: lastError };
+    }
+    
+    localStorage.setItem(STORAGE_KEYS.MICRO_INDEX, index.toString());
+    lastError = null;
+    return { success: true };
+  } catch (error) {
+    // Requirement 5.4: Handle localStorage failures
+    lastError = 'Failed to save micro-sentence index';
+    console.error('Failed to save micro-sentence index to localStorage:', error);
+    return { success: false, error: lastError };
+  }
+}
+
+/**
+ * Load micro-sentence index from localStorage
+ * Requirement 8.4: Restore micro-sentence index on load
+ */
+function loadMicroSentenceIndex(): number {
+  try {
+    if (!isLocalStorageAvailable()) {
+      console.error('localStorage is not available');
+      return 0;
+    }
+    
+    const serialized = localStorage.getItem(STORAGE_KEYS.MICRO_INDEX);
+    
+    if (!serialized) {
+      return 0;
+    }
+    
+    const index = parseInt(serialized, 10);
+    
+    if (isNaN(index)) {
+      console.error('Invalid micro-sentence index in localStorage');
+      return 0;
+    }
+    
+    return index;
+  } catch (error) {
+    // Requirement 5.4: Handle corrupted data
+    console.error('Failed to load micro-sentence index from localStorage:', error);
+    return 0;
+  }
+}
+
+/**
  * Clear all stored data
  * Requirement 5.4: Data management
  */
@@ -246,6 +382,8 @@ function clearAll(): void {
     localStorage.removeItem(STORAGE_KEYS.LOGS);
     localStorage.removeItem(STORAGE_KEYS.CREATURE);
     localStorage.removeItem(STORAGE_KEYS.SAFETY);
+    localStorage.removeItem(STORAGE_KEYS.CUSTOMIZATION);
+    localStorage.removeItem(STORAGE_KEYS.MICRO_INDEX);
   } catch (error) {
     console.error('Failed to clear localStorage:', error);
   }
@@ -268,6 +406,10 @@ export const storageService: StorageService = {
   loadCreatureState,
   saveSafetyScore,
   loadSafetyScore,
+  saveCustomization,
+  loadCustomization,
+  saveMicroSentenceIndex,
+  loadMicroSentenceIndex,
   clearAll,
   getLastError,
 };

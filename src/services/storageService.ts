@@ -13,6 +13,7 @@ const STORAGE_KEYS = {
   SAFETY: 'emochild_safety',
   CUSTOMIZATION: 'emochild_customization',
   MICRO_INDEX: 'emochild_micro_index',
+  TEXT_COLOR_PREF: 'emochild_text_color_pref',
 } as const;
 
 // Track last error for error handling
@@ -40,6 +41,8 @@ export interface StorageService {
   loadCustomization(): CreatureCustomization | null;
   saveMicroSentenceIndex(index: number): StorageResult;
   loadMicroSentenceIndex(): number;
+  saveTextColorPreference(color: string): StorageResult;
+  loadTextColorPreference(): string;
   clearAll(): void;
   getLastError(): string | null;
 }
@@ -369,6 +372,55 @@ function loadMicroSentenceIndex(): number {
 }
 
 /**
+ * Save text color preference to localStorage
+ * Requirement 8.2: Remember text color preference for next log
+ */
+function saveTextColorPreference(color: string): StorageResult {
+  try {
+    if (!isLocalStorageAvailable()) {
+      lastError = 'Storage is not available - data won\'t persist between sessions';
+      console.error('localStorage is not available');
+      return { success: false, error: lastError };
+    }
+    
+    localStorage.setItem(STORAGE_KEYS.TEXT_COLOR_PREF, color);
+    lastError = null;
+    return { success: true };
+  } catch (error) {
+    // Requirement 5.4: Handle localStorage failures
+    lastError = 'Failed to save text color preference';
+    console.error('Failed to save text color preference to localStorage:', error);
+    return { success: false, error: lastError };
+  }
+}
+
+/**
+ * Load text color preference from localStorage
+ * Requirement 8.2: Restore text color preference on load
+ * Default to 'white' if no preference exists
+ */
+function loadTextColorPreference(): string {
+  try {
+    if (!isLocalStorageAvailable()) {
+      console.error('localStorage is not available');
+      return 'white';
+    }
+    
+    const color = localStorage.getItem(STORAGE_KEYS.TEXT_COLOR_PREF);
+    
+    if (!color) {
+      return 'white';
+    }
+    
+    return color;
+  } catch (error) {
+    // Requirement 5.4: Handle corrupted data
+    console.error('Failed to load text color preference from localStorage:', error);
+    return 'white';
+  }
+}
+
+/**
  * Clear all stored data
  * Requirement 5.4: Data management
  */
@@ -384,6 +436,7 @@ function clearAll(): void {
     localStorage.removeItem(STORAGE_KEYS.SAFETY);
     localStorage.removeItem(STORAGE_KEYS.CUSTOMIZATION);
     localStorage.removeItem(STORAGE_KEYS.MICRO_INDEX);
+    localStorage.removeItem(STORAGE_KEYS.TEXT_COLOR_PREF);
   } catch (error) {
     console.error('Failed to clear localStorage:', error);
   }
@@ -410,6 +463,8 @@ export const storageService: StorageService = {
   loadCustomization,
   saveMicroSentenceIndex,
   loadMicroSentenceIndex,
+  saveTextColorPreference,
+  loadTextColorPreference,
   clearAll,
   getLastError,
 };

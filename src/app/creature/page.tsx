@@ -37,13 +37,14 @@ export default function CreaturePage() {
     safetyScore,
     customization,
     currentMicroSentence,
+    textColorPreference,
     addLog,
     getNextMicroSentence,
+    setTextColorPreference,
   } = useEmotion();
 
   const [emotionText, setEmotionText] = useState('');
   const [showEmptyError, setShowEmptyError] = useState(false);
-  const [selectedTextColor, setSelectedTextColor] = useState<PastelColor | 'white'>('white');
   const [showMicroSentence, setShowMicroSentence] = useState(false);
   const [displayedSentence, setDisplayedSentence] = useState<string>('');
 
@@ -67,8 +68,9 @@ export default function CreaturePage() {
 
   // Handle text color change
   // Requirement 4.1: Update selected text color
+  // Requirement 8.2: Persist text color preference
   const handleTextColorChange = (color: PastelColor | 'white') => {
-    setSelectedTextColor(color);
+    setTextColorPreference(color);
   };
 
   // Handle emotion submission
@@ -85,7 +87,8 @@ export default function CreaturePage() {
     const quickEmotion = isQuickEmotion(trimmedText) ? trimmedText as QuickEmotion : undefined;
 
     // Add log with text color and quick emotion
-    addLog(trimmedText, action, selectedTextColor, quickEmotion);
+    // Requirement 8.2: Use persisted text color preference
+    addLog(trimmedText, action, textColorPreference, quickEmotion);
 
     // Requirement 5.1: Show micro-sentence for expressed emotions
     if (action === 'expressed') {
@@ -97,7 +100,7 @@ export default function CreaturePage() {
     // Reset form
     setEmotionText('');
     setShowEmptyError(false);
-    // Keep the selected text color for next entry (Requirement 8.2)
+    // Text color preference is already persisted in context (Requirement 8.2)
   };
 
   // Helper to check if text matches a quick emotion
@@ -146,7 +149,7 @@ export default function CreaturePage() {
         <QuickEmotions onEmotionSelect={handleQuickEmotionSelect} />
       </section>
 
-      {/* Emotion input section - Requirement 4.1 */}
+      {/* Emotion input section - Requirement 4.1, 8.2 */}
       <section className={styles.inputSection}>
         <EmotionInput
           value={emotionText}
@@ -154,7 +157,7 @@ export default function CreaturePage() {
           maxLength={100}
           showEmptyError={showEmptyError}
           initialText={emotionText}
-          textColor={selectedTextColor}
+          textColor={textColorPreference}
           onTextColorChange={handleTextColorChange}
         />
       </section>

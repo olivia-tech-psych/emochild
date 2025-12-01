@@ -15,7 +15,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Context type definition
- * Requirements: 2.6, 4.3, 5.1, 5.2, 7.3, 7.5, 8.4
+ * Requirements: 2.6, 4.3, 5.1, 5.2, 7.3, 7.5, 8.2, 8.4
  */
 interface EmotionContextType {
   logs: EmotionLog[];
@@ -24,11 +24,13 @@ interface EmotionContextType {
   customization: CreatureCustomization;
   microSentenceIndex: number;
   currentMicroSentence: string | null;
+  textColorPreference: PastelColor | 'white';
   addLog: (text: string, action: EmotionAction, textColor?: PastelColor | 'white', quickEmotion?: QuickEmotion) => void;
   clearLogs: () => void;
   setCustomization: (customization: CreatureCustomization) => void;
   deleteLog: (logId: string) => void;
   getNextMicroSentence: () => string;
+  setTextColorPreference: (color: PastelColor | 'white') => void;
 }
 
 /**
@@ -57,6 +59,7 @@ interface EmotionProviderProps {
  * - 5.2: Load initial state from localStorage on mount
  * - 7.3: Delete logs with safety score recalculation
  * - 7.5: Update safety score when expressed logs are deleted
+ * - 8.2: Store and restore text color preference
  * - 8.4: Load customization and micro-sentence index from localStorage
  */
 export function EmotionProvider({ children }: EmotionProviderProps) {
@@ -70,6 +73,7 @@ export function EmotionProvider({ children }: EmotionProviderProps) {
   });
   const [microSentenceIndex, setMicroSentenceIndex] = useState<number>(0);
   const [currentMicroSentence, setCurrentMicroSentence] = useState<string | null>(null);
+  const [textColorPreference, setTextColorPreferenceState] = useState<PastelColor | 'white'>('white');
   const [isInitialized, setIsInitialized] = useState(false);
   
   // Use a ref to track the current micro-sentence index for synchronous access
@@ -77,6 +81,7 @@ export function EmotionProvider({ children }: EmotionProviderProps) {
 
   // Load initial state from localStorage on mount
   // Requirement 5.2: Load previous state on return
+  // Requirement 8.2: Load text color preference
   // Requirement 8.4: Load customization and micro-sentence index
   useEffect(() => {
     const loadedLogs = storageService.loadLogs();
@@ -84,6 +89,7 @@ export function EmotionProvider({ children }: EmotionProviderProps) {
     const loadedSafetyScore = storageService.loadSafetyScore();
     const loadedCustomization = storageService.loadCustomization();
     const loadedMicroIndex = storageService.loadMicroSentenceIndex();
+    const loadedTextColorPref = storageService.loadTextColorPreference();
 
     setLogs(loadedLogs);
     setCreatureState(loadedCreatureState || getInitialState());
@@ -97,6 +103,9 @@ export function EmotionProvider({ children }: EmotionProviderProps) {
     // Requirement 5.2, 8.4: Load micro-sentence index from localStorage
     setMicroSentenceIndex(loadedMicroIndex);
     microSentenceIndexRef.current = loadedMicroIndex;
+    
+    // Requirement 8.2: Load text color preference from localStorage
+    setTextColorPreferenceState(loadedTextColorPref as PastelColor | 'white');
     
     setIsInitialized(true);
   }, []);
@@ -247,6 +256,17 @@ export function EmotionProvider({ children }: EmotionProviderProps) {
     return sentence;
   }, []);
 
+  /**
+   * Set text color preference
+   * 
+   * Requirements:
+   * - 8.2: Store last selected text color and restore for next log
+   */
+  const setTextColorPreference = useCallback((color: PastelColor | 'white') => {
+    setTextColorPreferenceState(color);
+    storageService.saveTextColorPreference(color);
+  }, []);
+
   const value: EmotionContextType = {
     logs,
     creatureState,
@@ -254,11 +274,13 @@ export function EmotionProvider({ children }: EmotionProviderProps) {
     customization,
     microSentenceIndex,
     currentMicroSentence,
+    textColorPreference,
     addLog,
     clearLogs,
     setCustomization,
     deleteLog,
     getNextMicroSentence,
+    setTextColorPreference,
   };
 
   // Don't render children until initial state is loaded

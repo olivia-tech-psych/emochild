@@ -368,3 +368,9 @@ npm run test:watch
 - Bow now correctly positioned at right: 15% (appears on user's left side when viewing)
 - Updated CSS comment to clarify positioning relative to user's perspective
 - Requirement 6.2: Corrected bow accessory placement
+
+### [2025-12-02 18:00] Navigation Component Route Fix
+- Fixed Navigation component "Back to Creature" link to point to /creature instead of / (root)
+- Ensures proper navigation flow from history page back to main creature screen
+- Aligns with updated routing structure where landing page is at root and creature screen is at /creature
+- Requirement 10.3: Maintains smooth client-side transitions between pages

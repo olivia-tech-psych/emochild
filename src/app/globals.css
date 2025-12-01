@@ -3,20 +3,33 @@
   --color-bg-primary: #1a1a1a;
   --color-bg-secondary: #2d2d2d;
   
-  /* Pastels */
-  --color-mint: #b4f8c8;
-  --color-lavender: #c5b9e2;
-  --color-peach: #ffd4a3;
+  /* Extended pastel palette - all 8 colors */
+  --color-mint: #C9E4DE;
   --color-blue: #a0d2eb;
+  --color-lavender: #DBCDF0;
+  --color-peach: #fcded3;
   --color-pink: #F2C6DE;
+  --color-yellow: #ffeaa7;
+  --color-red: #f35d69;
+  --color-orange: #ff964f;
+  --color-white: #ffffff;
+  
+  /* Dark pink bow color */
+  --color-bow: #C11C84;
   
   /* Text */
   --color-text-primary: #f5f5f5;
   --color-text-secondary: #b0b0b0;
   
-  /* Creature glow */
-  --glow-mint: 0 0 20px rgba(180, 248, 200, 0.6);
-  --glow-lavender: 0 0 20px rgba(197, 185, 226, 0.6);
+  /* Glow effects for each color */
+  --glow-mint: 0 0 20px rgba(201, 228, 222, 0.6);
+  --glow-blue: 0 0 20px rgba(160, 210, 235, 0.6);
+  --glow-lavender: 0 0 20px rgba(219, 205, 240, 0.6);
+  --glow-peach: 0 0 20px rgba(252, 222, 211, 0.6);
+  --glow-pink: 0 0 20px rgba(242, 198, 222, 0.6);
+  --glow-yellow: 0 0 20px rgba(255, 234, 167, 0.6);
+  --glow-red: 0 0 20px rgba(243, 93, 105, 0.6);
+  --glow-orange: 0 0 20px rgba(255, 150, 79, 0.6);
   
   /* Spacing */
   --spacing-xs: 8px;
@@ -66,6 +79,26 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+/* Micro-sentence fade in/out animation */
+@keyframes fadeInOut {
+  0% { 
+    opacity: 0; 
+    transform: translateY(-10px); 
+  }
+  10% { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+  90% { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+  100% { 
+    opacity: 0; 
+    transform: translateY(-10px); 
+  }
 }
 
 /* Requirement 8.2: Respect user's motion preferences for accessibility */

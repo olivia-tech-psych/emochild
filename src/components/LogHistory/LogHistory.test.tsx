@@ -3,8 +3,8 @@
  * Property-based and unit tests for LogHistory component
  */
 
-import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
 import fc from 'fast-check';
 import { LogHistory } from './LogHistory';
 import { EmotionLog } from '@/types';
@@ -31,7 +31,7 @@ describe('Property 8: Log history chronological ordering', () => {
         ),
         (logs) => {
           // Render the component
-          const { container } = render(<LogHistory logs={logs} />);
+          const { container } = render(<LogHistory logs={logs} onDelete={vi.fn()} />);
           
           // Get all log items
           const logItems = container.querySelectorAll('[data-testid="log-item"]');
@@ -82,7 +82,7 @@ describe('Property 9: Log display completeness', () => {
           { minLength: 1, maxLength: 10 }
         ),
         (logs) => {
-          const { container } = render(<LogHistory logs={logs} />);
+          const { container } = render(<LogHistory logs={logs} onDelete={vi.fn()} />);
           
           // For each log, verify all required elements are present
           logs.forEach((log) => {
@@ -126,7 +126,7 @@ describe('LogHistory edge cases', () => {
    * Requirement 6.3: Display empty state message
    */
   it('should display empty state message when no logs exist', () => {
-    render(<LogHistory logs={[]} />);
+    render(<LogHistory logs={[]} onDelete={vi.fn()} />);
     
     const emptyMessage = screen.getByText(/No emotions logged yet/i);
     expect(emptyMessage).toBeTruthy();
@@ -145,7 +145,7 @@ describe('LogHistory edge cases', () => {
       timestamp: Date.now() - i * 1000
     }));
     
-    const { container } = render(<LogHistory logs={manyLogs} />);
+    const { container } = render(<LogHistory logs={manyLogs} onDelete={vi.fn()} />);
     
     // Verify all 15 logs are rendered
     const logItems = container.querySelectorAll('li');
@@ -186,7 +186,7 @@ describe('LogHistory edge cases', () => {
       }
     ];
     
-    const { container } = render(<LogHistory logs={logs} />);
+    const { container } = render(<LogHistory logs={logs} onDelete={vi.fn()} />);
     
     // Check for "Today" text in time elements
     const timeElements = container.querySelectorAll('time');
@@ -201,5 +201,175 @@ describe('LogHistory edge cases', () => {
     
     // Verify all 3 time elements are present
     expect(timeElements.length).toBe(3);
+  });
+  
+  /**
+   * Test delete button and confirmation dialog
+   * Requirement 7.3: Delete button with confirmation
+   */
+  it('should show delete button and confirmation dialog', () => {
+    const mockOnDelete = vi.fn();
+    const testLog: EmotionLog = {
+      id: 'test-1',
+      text: 'Test emotion',
+      action: 'expressed',
+      timestamp: Date.now()
+    };
+    
+    const { container } = render(<LogHistory logs={[testLog]} onDelete={mockOnDelete} />);
+    
+    // Find and click delete button
+    const deleteButton = screen.getByText('Delete');
+    expect(deleteButton).toBeTruthy();
+    
+    fireEvent.click(deleteButton);
+    
+    // Verify confirmation dialog appears
+    const confirmMessage = screen.getByText(/This action cannot be undone/i);
+    expect(confirmMessage).toBeTruthy();
+    
+    // Find and click confirm button
+    const confirmButton = screen.getByText('Confirm');
+    fireEvent.click(confirmButton);
+    
+    // Verify onDelete was called with correct ID
+    expect(mockOnDelete).toHaveBeenCalledWith('test-1');
+  });
+  
+  /**
+   * Test cancel deletion
+   * Requirement 7.3: Cancel deletion
+   */
+  it('should allow canceling deletion', () => {
+    const mockOnDelete = vi.fn();
+    const testLog: EmotionLog = {
+      id: 'test-1',
+      text: 'Test emotion',
+      action: 'expressed',
+      timestamp: Date.now()
+    };
+    
+    render(<LogHistory logs={[testLog]} onDelete={mockOnDelete} />);
+    
+    // Click delete button
+    const deleteButton = screen.getByText('Delete');
+    fireEvent.click(deleteButton);
+    
+    // Click cancel button
+    const cancelButton = screen.getByText('Cancel');
+    fireEvent.click(cancelButton);
+    
+    // Verify onDelete was NOT called
+    expect(mockOnDelete).not.toHaveBeenCalled();
+    
+    // Verify delete button is visible again
+    const deleteButtonAgain = screen.getByText('Delete');
+    expect(deleteButtonAgain).toBeTruthy();
+  });
+  
+  /**
+   * Test text color rendering
+   * Requirement 7.1: Render text in saved color
+   */
+  it('should render text in saved color', () => {
+    const testLogs: EmotionLog[] = [
+      {
+        id: '1',
+        text: 'Lavender emotion',
+        action: 'expressed',
+        timestamp: Date.now(),
+        textColor: 'lavender'
+      },
+      {
+        id: '2',
+        text: 'White emotion',
+        action: 'suppressed',
+        timestamp: Date.now() - 1000,
+        textColor: 'white'
+      },
+      {
+        id: '3',
+        text: 'Default emotion',
+        action: 'expressed',
+        timestamp: Date.now() - 2000
+        // No textColor - should default to white
+      }
+    ];
+    
+    const { container } = render(<LogHistory logs={testLogs} onDelete={vi.fn()} />);
+    
+    // Get all text elements
+    const textElements = container.querySelectorAll('p[class*="text"]');
+    
+    // Verify colors are applied
+    expect(textElements[0]).toHaveStyle({ color: '#DBCDF0' }); // lavender
+    expect(textElements[1]).toHaveStyle({ color: '#ffffff' }); // white
+    expect(textElements[2]).toHaveStyle({ color: '#ffffff' }); // default white
+  });
+  
+  /**
+   * Test emoji display based on action type
+   * Requirement 7.2: Display emoji based on action type
+   */
+  it('should display correct emoji for expressed and suppressed actions', () => {
+    const testLogs: EmotionLog[] = [
+      {
+        id: '1',
+        text: 'Expressed emotion',
+        action: 'expressed',
+        timestamp: Date.now()
+      },
+      {
+        id: '2',
+        text: 'Suppressed emotion',
+        action: 'suppressed',
+        timestamp: Date.now() - 1000
+      }
+    ];
+    
+    const { container } = render(<LogHistory logs={testLogs} onDelete={vi.fn()} />);
+    
+    // Check for expressed emoji
+    const expressedIcon = screen.getByLabelText('Expressed emotion');
+    expect(expressedIcon.textContent).toBe('🌱');
+    
+    // Check for suppressed emoji
+    const suppressedIcon = screen.getByLabelText('Suppressed emotion');
+    expect(suppressedIcon.textContent).toBe('🌑');
+  });
+  
+  /**
+   * Test dividers between entries
+   * Requirement 7.4: Apply pastel dividers between entries
+   */
+  it('should render dividers between log entries', () => {
+    const testLogs: EmotionLog[] = [
+      {
+        id: '1',
+        text: 'First emotion',
+        action: 'expressed',
+        timestamp: Date.now()
+      },
+      {
+        id: '2',
+        text: 'Second emotion',
+        action: 'suppressed',
+        timestamp: Date.now() - 1000
+      },
+      {
+        id: '3',
+        text: 'Third emotion',
+        action: 'expressed',
+        timestamp: Date.now() - 2000
+      }
+    ];
+    
+    const { container } = render(<LogHistory logs={testLogs} onDelete={vi.fn()} />);
+    
+    // Get all dividers
+    const dividers = container.querySelectorAll('[class*="divider"]');
+    
+    // Should have 2 dividers for 3 entries (n-1)
+    expect(dividers.length).toBe(2);
   });
 });

@@ -99,21 +99,141 @@
   gap: var(--spacing-xs);
 }
 
+/* Log header with timestamp and delete button */
+/* Requirement 7.1: Display timestamp and delete button on same line */
+.logHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
 /* Timestamp styling */
-/* Requirement 6.2: Display timestamp */
+/* Requirement 7.1: Display timestamp */
 .timestamp {
   font-size: var(--font-size-small);
   color: var(--color-text-secondary);
   font-weight: var(--font-weight-medium);
 }
 
+/* Delete button styling */
+/* Requirement 7.3: Delete button for each entry */
+.deleteButton {
+  font-size: var(--font-size-small);
+  color: var(--color-red);
+  background: transparent;
+  border: none;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+  font-weight: var(--font-weight-medium);
+}
+
+.deleteButton:hover {
+  background: rgba(243, 93, 105, 0.1);
+  color: #ff6b7a;
+}
+
+.deleteButton:focus {
+  outline: 2px solid var(--color-red);
+  outline-offset: 2px;
+}
+
+.deleteButton:active {
+  transform: scale(0.95);
+}
+
 /* Emotion text styling */
-/* Requirement 6.2: Display emotion text */
+/* Requirement 7.1: Display emotion text in saved color */
 .text {
   font-size: var(--font-size-body);
-  color: var(--color-text-primary);
+  /* Color is set inline via style prop */
   line-height: 1.5;
   word-wrap: break-word;
+}
+
+/* Confirmation dialog styling */
+/* Requirement 7.3: Confirmation dialog before deletion */
+.confirmDialog {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  background: rgba(243, 93, 105, 0.1);
+  border-radius: 6px;
+  border: 1px solid var(--color-red);
+}
+
+.confirmMessage {
+  font-size: var(--font-size-small);
+  color: var(--color-text-primary);
+  margin: 0;
+  font-weight: var(--font-weight-medium);
+}
+
+.confirmButtons {
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: flex-end;
+}
+
+.confirmButton,
+.cancelButton {
+  font-size: var(--font-size-small);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-weight: var(--font-weight-medium);
+  transition: all var(--transition-fast);
+}
+
+.confirmButton {
+  background: var(--color-red);
+  color: white;
+}
+
+.confirmButton:hover {
+  background: #ff6b7a;
+  transform: translateY(-1px);
+}
+
+.confirmButton:focus {
+  outline: 2px solid var(--color-red);
+  outline-offset: 2px;
+}
+
+.cancelButton {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-text-secondary);
+}
+
+.cancelButton:hover {
+  background: var(--color-bg-primary);
+  border-color: var(--color-text-primary);
+}
+
+.cancelButton:focus {
+  outline: 2px solid var(--color-mint);
+  outline-offset: 2px;
+}
+
+/* Divider between log entries */
+/* Requirement 7.4: Pastel dividers between entries */
+.divider {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--color-lavender) 20%,
+    var(--color-mint) 50%,
+    var(--color-lavender) 80%,
+    transparent
+  );
+  opacity: 0.3;
+  margin: var(--spacing-xs) 0;
 }
 
 /* Empty state styling */
@@ -156,6 +276,20 @@
   .text {
     font-size: 15px;
   }
+  
+  .deleteButton {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+  
+  .confirmButtons {
+    flex-direction: column;
+  }
+  
+  .confirmButton,
+  .cancelButton {
+    width: 100%;
+  }
 }
 
 @media (max-width: 400px) {
@@ -179,5 +313,10 @@
   
   .emptyMessage {
     font-size: 15px;
+  }
+  
+  .logHeader {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }

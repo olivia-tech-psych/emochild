@@ -1,15 +1,17 @@
 /**
  * LogHistory Component
  * Displays emotion logs in reverse chronological order
- * Requirements: 6.1, 6.2, 6.3, 6.4, 6.5
+ * Requirements: 6.1, 6.2, 6.3, 6.4, 6.5, 7.1, 7.2, 7.3, 7.4
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { EmotionLog } from '@/types';
+import { COLOR_HEX_MAP } from '@/utils/colorMapping';
 import styles from './LogHistory.module.css';
 
 interface LogHistoryProps {
   logs: EmotionLog[];
+  onDelete: (logId: string) => void;
 }
 
 /**
@@ -54,9 +56,15 @@ function formatTimestamp(timestamp: number): string {
  * - 6.3: Display empty state message
  * - 6.4: Implement scrolling for long lists
  * - 6.5: Use visual indicators for expressed vs suppressed
+ * - 7.1: Display text in saved color
+ * - 7.2: Show emoji based on action type
+ * - 7.3: Add delete button with confirmation
+ * - 7.4: Apply pastel dividers between entries
  * - 7.5: Keyboard accessibility and semantic HTML
  */
-export function LogHistory({ logs }: LogHistoryProps) {
+export function LogHistory({ logs, onDelete }: LogHistoryProps) {
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+  
   // Requirement 6.3: Empty state message
   if (logs.length === 0) {
     return (
@@ -71,6 +79,30 @@ export function LogHistory({ logs }: LogHistoryProps) {
   // Requirement 6.1: Sort logs in reverse chronological order (newest first)
   const sortedLogs = [...logs].sort((a, b) => b.timestamp - a.timestamp);
   
+  /**
+   * Handle delete button click
+   * Requirement 7.3: Show confirmation dialog
+   */
+  const handleDeleteClick = (logId: string) => {
+    setDeleteConfirmId(logId);
+  };
+  
+  /**
+   * Handle delete confirmation
+   * Requirement 7.3: Confirm deletion and remove log
+   */
+  const handleConfirmDelete = (logId: string) => {
+    onDelete(logId);
+    setDeleteConfirmId(null);
+  };
+  
+  /**
+   * Handle delete cancellation
+   */
+  const handleCancelDelete = () => {
+    setDeleteConfirmId(null);
+  };
+  
   return (
     <div className={styles.container}>
       <ul 
@@ -78,35 +110,94 @@ export function LogHistory({ logs }: LogHistoryProps) {
         role="list"
         aria-label={`Emotion log history with ${sortedLogs.length} ${sortedLogs.length === 1 ? 'entry' : 'entries'}`}
       >
-        {sortedLogs.map((log) => (
-          <li
-            key={log.id}
-            data-testid="log-item"
-            className={`${styles.logItem} ${
-              log.action === 'expressed' ? styles.expressed : styles.suppressed
-            }`}
-            role="listitem"
-          >
-            {/* Requirement 6.5: Visual indicator for action type */}
-            <span 
-              className={styles.icon} 
-              aria-label={log.action === 'expressed' ? 'Expressed emotion' : 'Suppressed emotion'}
-              role="img"
-            >
-              {log.action === 'expressed' ? '🌱' : '🌑'}
-            </span>
-            
-            <div className={styles.logContent}>
-              {/* Requirement 6.2: Display timestamp */}
-              <time className={styles.timestamp} dateTime={new Date(log.timestamp).toISOString()}>
-                {formatTimestamp(log.timestamp)}
-              </time>
+        {sortedLogs.map((log, index) => {
+          // Requirement 7.1: Get text color from log or default to white
+          const textColor = log.textColor || 'white';
+          const textColorHex = COLOR_HEX_MAP[textColor];
+          const isConfirming = deleteConfirmId === log.id;
+          
+          return (
+            <React.Fragment key={log.id}>
+              <li
+                data-testid="log-item"
+                className={`${styles.logItem} ${
+                  log.action === 'expressed' ? styles.expressed : styles.suppressed
+                }`}
+                role="listitem"
+              >
+                {/* Requirement 7.2: Visual indicator for action type */}
+                <span 
+                  className={styles.icon} 
+                  aria-label={log.action === 'expressed' ? 'Expressed emotion' : 'Suppressed emotion'}
+                  role="img"
+                >
+                  {log.action === 'expressed' ? '🌱' : '🌑'}
+                </span>
+                
+                <div className={styles.logContent}>
+                  <div className={styles.logHeader}>
+                    {/* Requirement 7.1: Display timestamp */}
+                    <time className={styles.timestamp} dateTime={new Date(log.timestamp).toISOString()}>
+                      {formatTimestamp(log.timestamp)}
+                    </time>
+                    
+                    {/* Requirement 7.3: Delete button */}
+                    {!isConfirming && (
+                      <button
+                        className={styles.deleteButton}
+                        onClick={() => handleDeleteClick(log.id)}
+                        aria-label={`Delete log: ${log.text}`}
+                        type="button"
+                      >
+                        Delete
+                      </button>
+                    )}
+                  </div>
+                  
+                  {/* Requirement 7.3: Confirmation dialog */}
+                  {isConfirming ? (
+                    <div className={styles.confirmDialog} role="alertdialog" aria-labelledby={`confirm-${log.id}`}>
+                      <p id={`confirm-${log.id}`} className={styles.confirmMessage}>
+                        This action cannot be undone
+                      </p>
+                      <div className={styles.confirmButtons}>
+                        <button
+                          className={styles.confirmButton}
+                          onClick={() => handleConfirmDelete(log.id)}
+                          aria-label="Confirm deletion"
+                          type="button"
+                        >
+                          Confirm
+                        </button>
+                        <button
+                          className={styles.cancelButton}
+                          onClick={handleCancelDelete}
+                          aria-label="Cancel deletion"
+                          type="button"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    /* Requirement 7.1: Display emotion text in saved color */
+                    <p 
+                      className={styles.text}
+                      style={{ color: textColorHex }}
+                    >
+                      {log.text}
+                    </p>
+                  )}
+                </div>
+              </li>
               
-              {/* Requirement 6.2: Display emotion text */}
-              <p className={styles.text}>{log.text}</p>
-            </div>
-          </li>
-        ))}
+              {/* Requirement 7.4: Pastel dividers between entries */}
+              {index < sortedLogs.length - 1 && (
+                <div className={styles.divider} aria-hidden="true" />
+              )}
+            </React.Fragment>
+          );
+        })}
       </ul>
     </div>
   );

@@ -18,13 +18,18 @@ export function MicroSentence({ sentence, onDismiss }: MicroSentenceProps) {
 
   return (
     <div className={styles.container}>
-      <div className={styles.sentence}>
+      <div 
+        className={styles.sentence}
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      >
         {sentence}
       </div>
       <button
         className={styles.dismissButton}
         onClick={onDismiss}
-        aria-label="Dismiss message"
+        aria-label="Dismiss encouraging message"
       >
         ×
       </button>

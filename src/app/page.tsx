@@ -1,120 +1,32 @@
 /**
- * Main page - Emotion Log Screen
- * Integrates all components for the primary interface
- * Requirements: 1.1, 2.1, 2.4, 10.1, 10.4, 7.5
+ * Landing Page - Root Route
+ * Welcoming entry point that explains EmoChild concept
+ * Requirements: 1.1, 1.2, 1.3, 1.4, 1.5
  */
 
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { useEmotion } from '@/context/EmotionContext';
-import { EmotionInput } from '@/components/EmotionInput';
-import { ActionButtons } from '@/components/ActionButtons';
-import { Creature } from '@/components/Creature';
-import { SafetyBar } from '@/components/SafetyBar';
-import { Navigation } from '@/components/Navigation';
-import type { EmotionAction } from '@/types';
-import styles from './page.module.css';
+import React from 'react';
+import { useRouter } from 'next/navigation';
+import { LandingHero } from '@/components/LandingHero';
 
 /**
- * Home page component
+ * Landing page component
  * 
  * Requirements:
- * - 1.1: Display emotion log input as primary interface element
- * - 2.1: Display action buttons for expressed/suppressed
- * - 2.4: Clear input field after submission
- * - 10.1: Emotion log input is immediately accessible
- * - 10.4: Auto-focus cursor for immediate typing
- * - 7.5: Keyboard accessibility (Tab, Enter, Escape)
+ * - 1.1: Display app name "EmoChild: Your Inner Child in Your Pocket"
+ * - 1.2: Show brief explanation with pastel glow effect
+ * - 1.3: Apply soft pastel glow on dark mode background
+ * - 1.4: Display landing page on every app visit/refresh
+ * - 1.5: Provide Start button that navigates to setup flow
  */
-export default function Home() {
-  const { creatureState, safetyScore, addLog } = useEmotion();
-  const [inputValue, setInputValue] = useState('');
-  const [showEmptyError, setShowEmptyError] = useState(false);
-  const maxLength = 100;
+export default function LandingPage() {
+  const router = useRouter();
 
-  // Handle action button clicks
-  // Requirement 2.4: Clear input after submission
-  const handleAction = (action: EmotionAction) => {
-    if (inputValue.trim().length === 0) {
-      // Requirement 1.4: Show validation error for empty input
-      setShowEmptyError(true);
-      return; // Prevent empty submissions
-    }
-
-    // Add log to context
-    addLog(inputValue, action);
-
-    // Requirement 2.4: Clear input field after submission
-    setInputValue('');
-    setShowEmptyError(false);
+  // Requirement 1.5: Navigate to setup on Start button click
+  const handleStart = () => {
+    router.push('/setup');
   };
 
-  const handleExpress = () => handleAction('expressed');
-  const handleSuppress = () => handleAction('suppressed');
-
-  // Requirement 7.5: Keyboard accessibility - Escape key clears input
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && inputValue.length > 0) {
-        setInputValue('');
-        e.preventDefault();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [inputValue]);
-
-  // Disable buttons when input is empty
-  const isButtonDisabled = inputValue.trim().length === 0;
-
-  return (
-    <main className={styles.main}>
-      {/* Skip to main content link for keyboard users - Requirement 7.5 */}
-      <a href="#emotion-input" className={styles.skipLink}>
-        Skip to emotion input
-      </a>
-
-      {/* Creature at top - Requirement 10.1 */}
-      <section className={styles.creatureSection} aria-label="EmoChild creature display">
-        <Creature state={creatureState} />
-      </section>
-
-      {/* Safety bar below creature */}
-      <section className={styles.safetySection}>
-        <SafetyBar score={safetyScore} />
-      </section>
-
-      {/* Input in middle - Requirement 1.1, 10.1, 10.4 */}
-      <section className={styles.inputSection} aria-label="Emotion logging">
-        <EmotionInput
-          value={inputValue}
-          onChange={(value) => {
-            setInputValue(value);
-            // Clear error when user starts typing
-            if (showEmptyError && value.trim().length > 0) {
-              setShowEmptyError(false);
-            }
-          }}
-          maxLength={maxLength}
-          showEmptyError={showEmptyError}
-        />
-      </section>
-
-      {/* Action buttons - Requirement 2.1 */}
-      <section className={styles.actionsSection} aria-label="Choose how you processed this emotion">
-        <ActionButtons
-          onExpress={handleExpress}
-          onSuppress={handleSuppress}
-          disabled={isButtonDisabled}
-        />
-      </section>
-
-      {/* Navigation to history */}
-      <nav className={styles.navigationSection} aria-label="Page navigation">
-        <Navigation type="toHistory" />
-      </nav>
-    </main>
-  );
+  return <LandingHero onStart={handleStart} />;
 }

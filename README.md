@@ -20,7 +20,7 @@ EmoChild is a modern resurrection of the classic Tamagotchi (1996 digital pet), 
 - **SetupForm Component**: Creature customization form with name input (50 character limit), ColorPicker integration, real-time preview blob that updates with selected color, optional bow toggle checkbox, and form validation
 - **QuickEmotions Component**: Grid of 10 quick emotion buttons (stressed, anxious, calm, excited, sad, angry, confused, grateful, curious, scared) with pastel color styling, keyboard navigation support, and accessibility features for faster emotion logging
 - **MicroSentence Component**: Displays encouraging validation messages when emotions are expressed, with fade-in/out animation, auto-dismiss after 2 seconds, manual dismissal option, and soft pastel glow effect for emotional support
-- **LogHistory Component**: Displays emotion logs in reverse chronological order with human-readable timestamps, visual indicators for expressed/suppressed actions, empty state handling, and scrollable list
+- **LogHistory Component**: Displays emotion logs in reverse chronological order with human-readable timestamps, visual indicators for expressed/suppressed actions, empty state handling, scrollable list, text color rendering from saved logs, delete functionality with confirmation dialog, and pastel dividers between entries
 - **Navigation Component**: Provides navigation links between main and history pages with smooth transitions using Next.js Link component, styled with pastel colors and focus indicators
 - **Property-Based Testing**: fast-check integration for testing creature brightness calculations and text contrast accessibility
 - **Unit Testing**: Comprehensive test coverage using Vitest and React Testing Library
@@ -338,3 +338,16 @@ npm run test:watch
 - Bow accessory positioned on creature's head using CSS with dark pink color (#C11C84)
 - Completed Task 13 from emochild-v2 implementation plan
 - Requirements: 6.1, 6.2, 6.3, 6.4, 6.5
+
+### [2025-12-02 16:00] LogHistory Component Enhancement
+- Enhanced LogHistory component with delete functionality and colored text display
+- Added onDelete prop to handle log deletion with confirmation workflow
+- Implemented delete button for each log entry with confirmation dialog
+- Confirmation dialog displays "This action cannot be undone" message with Confirm/Cancel buttons
+- Integrated COLOR_HEX_MAP to render emotion text in saved textColor from logs
+- Added visual emoji indicators (🌱 for expressed, 🌑 for suppressed) with ARIA labels
+- Implemented pastel dividers between log entries for better visual separation
+- Delete functionality updates both UI and localStorage through parent context
+- Maintains accessibility with proper ARIA roles (alertdialog) and labels
+- Completed Task 14 from emochild-v2 implementation plan
+- Requirements: 7.1, 7.2, 7.3, 7.4

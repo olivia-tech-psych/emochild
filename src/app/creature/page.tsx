@@ -18,6 +18,7 @@ import { QuickEmotions } from '@/components/QuickEmotions';
 import { MicroSentence } from '@/components/MicroSentence';
 import { Navigation } from '@/components/Navigation';
 import type { EmotionAction, PastelColor, QuickEmotion } from '@/types';
+import { COLOR_HEX_MAP } from '@/utils/colorMapping';
 import styles from './page.module.css';
 
 /**
@@ -127,6 +128,9 @@ export default function CreaturePage() {
       {/* Creature section - Requirement 6.1: Pass customization */}
       <section className={styles.creatureSection}>
         <Creature state={creatureState} customization={customization} />
+        <h2 className={styles.creatureName} style={{ color: COLOR_HEX_MAP[customization.color] }}>
+          {customization.name}
+        </h2>
       </section>
 
       {/* Micro-sentence display - Requirement 5.1 */}
@@ -176,6 +180,9 @@ export default function CreaturePage() {
         <div className={styles.navigationLinks}>
           <Link href="/" className={styles.landingLink}>
             ← Home
+          </Link>
+          <Link href="/settings" className={styles.settingsLink}>
+            ⚙️ Settings
           </Link>
           <Navigation type="toHistory" />
         </div>

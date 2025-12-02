@@ -17,7 +17,7 @@ EmoChild is a modern resurrection of the classic Tamagotchi (1996 digital pet), 
 - **SafetyBar Component**: Progress bar displaying inner safety score with mint-colored fill, smooth growth animation, and numeric score display
 - **ColorPicker Component**: Reusable color selector with 8 pastel color swatches plus optional white, keyboard navigation, and accessibility features for creature and text color customization
 - **LandingHero Component**: Welcoming landing page hero section with app name, explanation text with pastel glow effect, and Start button with mint accent color and responsive design
-- **SetupForm Component**: Creature customization form with name input (50 character limit), ColorPicker integration, real-time preview blob that updates with selected color, optional bow toggle checkbox, and form validation
+- **SetupForm Component**: Creature customization form with name input (50 character limit), ColorPicker integration, real-time preview blob that updates with selected color, optional bow toggle checkbox, form validation, and support for both initial setup and editing modes with initialCustomization prop
 - **QuickEmotions Component**: Grid of 10 quick emotion buttons (stressed, anxious, calm, excited, sad, angry, confused, grateful, curious, scared) with pastel color styling, keyboard navigation support, and accessibility features for faster emotion logging
 - **MicroSentence Component**: Displays encouraging validation messages when emotions are expressed, with fade-in/out animation, auto-dismiss after 2 seconds, manual dismissal option, and soft pastel glow effect for emotional support
 - **LogHistory Component**: Displays emotion logs in reverse chronological order with human-readable timestamps, visual indicators for expressed/suppressed actions, empty state handling, scrollable list, text color rendering from saved logs, delete functionality with confirmation dialog, and pastel dividers between entries
@@ -401,3 +401,11 @@ npm run test:watch
 - Optimized CSS transitions to use GPU-accelerated properties (filter, transform, box-shadow, background)
 - Improves animation smoothness and reduces CPU load during creature state transitions
 - Requirements 8.2, 8.3: Enhanced smooth transitions with better performance
+
+### [2025-12-02 20:00] SetupForm Editing Mode Support
+- Extended SetupForm component interface to support editing existing creature customization
+- Added initialCustomization prop to pre-populate form fields with current creature settings
+- Added isEditing prop to distinguish between initial setup and editing modes
+- Enables users to modify creature name, color, and bow accessory after initial setup
+- Form now supports both creation and update workflows with same component
+- Requirement 2.7: Provides way to change creature customization later

@@ -14,6 +14,10 @@ import { CreatureCustomization, PastelColor } from '@/types';
 export interface SetupFormProps {
   /** Callback when setup is completed */
   onComplete: (customization: CreatureCustomization) => void;
+  /** Initial customization values (for editing mode) */
+  initialCustomization?: CreatureCustomization;
+  /** Whether this is editing mode or initial setup */
+  isEditing?: boolean;
 }
 
 /**
@@ -26,10 +30,10 @@ export interface SetupFormProps {
  * - 2.5: Provide optional toggle for dark pink bow accessory
  * - 2.6: Save creature name and color to localStorage
  */
-export function SetupForm({ onComplete }: SetupFormProps) {
-  const [name, setName] = useState('');
-  const [color, setColor] = useState<PastelColor>('orange');
-  const [hasBow, setHasBow] = useState(false);
+export function SetupForm({ onComplete, initialCustomization, isEditing = false }: SetupFormProps) {
+  const [name, setName] = useState(initialCustomization?.name || '');
+  const [color, setColor] = useState<PastelColor>(initialCustomization?.color || 'orange');
+  const [hasBow, setHasBow] = useState(initialCustomization?.hasBow || false);
 
   // Handle name input change with 50 character limit
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,7 +68,9 @@ export function SetupForm({ onComplete }: SetupFormProps) {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Customize Your Creature</h1>
+      <h1 className={styles.title}>
+        {isEditing ? 'Edit Your Creature' : 'Customize Your Creature'}
+      </h1>
       
       <form onSubmit={handleSubmit} className={styles.form}>
         {/* Name Input */}
@@ -132,9 +138,9 @@ export function SetupForm({ onComplete }: SetupFormProps) {
           type="submit"
           className={styles.continueButton}
           disabled={!isContinueEnabled}
-          aria-label="Continue to creature screen"
+          aria-label={isEditing ? 'Save changes' : 'Continue to creature screen'}
         >
-          Continue
+          {isEditing ? 'Save Changes' : 'Continue'}
         </button>
       </form>
     </div>

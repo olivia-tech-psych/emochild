@@ -22,7 +22,7 @@ import styles from './page.module.css';
  * - 7.5: Keyboard accessibility and semantic HTML
  */
 export default function HistoryPage() {
-  const { logs, deleteLog } = useEmotion();
+  const { logs, deleteLog, editLog } = useEmotion();
 
   return (
     <main className={styles.container}>
@@ -35,7 +35,7 @@ export default function HistoryPage() {
       </header>
       
       <section className={styles.historyContainer} aria-label="Emotion log history">
-        <LogHistory logs={logs} onDelete={deleteLog} />
+        <LogHistory logs={logs} onDelete={deleteLog} onEdit={editLog} />
       </section>
     </main>
   );

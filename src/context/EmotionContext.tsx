@@ -29,6 +29,7 @@ interface EmotionContextType {
   clearLogs: () => void;
   setCustomization: (customization: CreatureCustomization) => void;
   deleteLog: (logId: string) => void;
+  editLog: (logId: string, newText: string) => void;
   getNextMicroSentence: () => string;
   setTextColorPreference: (color: PastelColor | 'white') => void;
 }
@@ -243,6 +244,22 @@ export function EmotionProvider({ children }: EmotionProviderProps) {
   }, []);
 
   /**
+   * Edit an existing log
+   * Updates the log text while preserving other properties
+   */
+  const editLog = useCallback((logId: string, newText: string) => {
+    setLogs(prevLogs => {
+      const updatedLogs = prevLogs.map(log => 
+        log.id === logId ? { ...log, text: newText } : log
+      );
+      
+      // Persist changes to localStorage
+      storageService.saveLogs(updatedLogs);
+      return updatedLogs;
+    });
+  }, []);
+
+  /**
    * Get the next micro-sentence
    * 
    * Requirements:
@@ -281,6 +298,7 @@ export function EmotionProvider({ children }: EmotionProviderProps) {
     clearLogs,
     setCustomization,
     deleteLog,
+    editLog,
     getNextMicroSentence,
     setTextColorPreference,
   };

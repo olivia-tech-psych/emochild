@@ -12,6 +12,44 @@
   padding: var(--spacing-md);
 }
 
+/* Export section */
+.exportSection {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: var(--spacing-md);
+}
+
+.exportButton {
+  font-size: var(--font-size-small);
+  color: var(--color-text-primary);
+  background: var(--color-mint);
+  color: var(--color-bg-primary);
+  border: none;
+  padding: var(--spacing-sm) var(--spacing-md);
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all var(--transition-fast);
+  font-weight: var(--font-weight-semibold);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.exportButton:hover {
+  background: var(--color-blue);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(201, 228, 222, 0.3);
+}
+
+.exportButton:focus {
+  outline: 2px solid var(--color-mint);
+  outline-offset: 2px;
+}
+
+.exportButton:active {
+  transform: translateY(0);
+}
+
 /* Custom scrollbar styling for dark theme */
 .container::-webkit-scrollbar {
   width: 8px;
@@ -116,6 +154,39 @@
   font-weight: var(--font-weight-medium);
 }
 
+/* Action buttons container */
+.actionButtons {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+/* Edit button styling */
+.editButton {
+  font-size: var(--font-size-small);
+  color: var(--color-blue);
+  background: transparent;
+  border: none;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+  font-weight: var(--font-weight-medium);
+}
+
+.editButton:hover {
+  background: rgba(160, 210, 235, 0.1);
+  color: var(--color-mint);
+}
+
+.editButton:focus {
+  outline: 2px solid var(--color-blue);
+  outline-offset: 2px;
+}
+
+.editButton:active {
+  transform: scale(0.95);
+}
+
 /* Delete button styling */
 /* Requirement 7.3: Delete button for each entry */
 .deleteButton {
@@ -218,6 +289,69 @@
 .cancelButton:focus {
   outline: 2px solid var(--color-mint);
   outline-offset: 2px;
+}
+
+/* Edit dialog styling */
+.editDialog {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  background: rgba(160, 210, 235, 0.1);
+  border-radius: 6px;
+  border: 1px solid var(--color-blue);
+}
+
+.editTextarea {
+  width: 100%;
+  min-height: 80px;
+  padding: var(--spacing-sm);
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-blue);
+  border-radius: 4px;
+  font-size: var(--font-size-body);
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color var(--transition-fast);
+}
+
+.editTextarea:focus {
+  outline: none;
+  border-color: var(--color-mint);
+  box-shadow: 0 0 0 2px rgba(201, 228, 222, 0.2);
+}
+
+.editButtons {
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: flex-end;
+}
+
+.saveButton {
+  font-size: var(--font-size-small);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-weight: var(--font-weight-medium);
+  transition: all var(--transition-fast);
+  background: var(--color-mint);
+  color: var(--color-bg-primary);
+}
+
+.saveButton:hover:not(:disabled) {
+  background: var(--color-blue);
+  transform: translateY(-1px);
+}
+
+.saveButton:focus {
+  outline: 2px solid var(--color-mint);
+  outline-offset: 2px;
+}
+
+.saveButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* Divider between log entries */

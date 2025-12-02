@@ -12,6 +12,7 @@ import styles from './LogHistory.module.css';
 interface LogHistoryProps {
   logs: EmotionLog[];
   onDelete: (logId: string) => void;
+  onEdit?: (logId: string, newText: string) => void;
 }
 
 /**
@@ -62,8 +63,10 @@ function formatTimestamp(timestamp: number): string {
  * - 7.4: Apply pastel dividers between entries
  * - 7.5: Keyboard accessibility and semantic HTML
  */
-export function LogHistory({ logs, onDelete }: LogHistoryProps) {
+export function LogHistory({ logs, onDelete, onEdit }: LogHistoryProps) {
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editText, setEditText] = useState('');
   
   // Requirement 6.3: Empty state message
   if (logs.length === 0) {
@@ -103,8 +106,86 @@ export function LogHistory({ logs, onDelete }: LogHistoryProps) {
     setDeleteConfirmId(null);
   };
   
+  /**
+   * Handle edit button click
+   */
+  const handleEditClick = (log: EmotionLog) => {
+    setEditingId(log.id);
+    setEditText(log.text);
+  };
+  
+  /**
+   * Handle edit save
+   */
+  const handleSaveEdit = (logId: string) => {
+    if (onEdit && editText.trim()) {
+      onEdit(logId, editText.trim());
+      setEditingId(null);
+      setEditText('');
+    }
+  };
+  
+  /**
+   * Handle edit cancel
+   */
+  const handleCancelEdit = () => {
+    setEditingId(null);
+    setEditText('');
+  };
+  
+  /**
+   * Export logs to CSV
+   */
+  const handleExportCSV = () => {
+    // Create CSV header
+    const header = 'Timestamp,Date,Time,Emotion,Action,Emoji,Text Color,Quick Emotion\n';
+    
+    // Create CSV rows
+    const rows = sortedLogs.map(log => {
+      const date = new Date(log.timestamp);
+      const emoji = log.action === 'expressed' ? '🌱' : '🌑';
+      const dateStr = date.toLocaleDateString('en-US');
+      const timeStr = date.toLocaleTimeString('en-US');
+      const textColor = log.textColor || 'white';
+      const quickEmotion = log.quickEmotion || '';
+      
+      // Escape text for CSV (handle quotes and commas)
+      const escapedText = `"${log.text.replace(/"/g, '""')}"`;
+      
+      return `${log.timestamp},${dateStr},${timeStr},${escapedText},${log.action},${emoji},${textColor},${quickEmotion}`;
+    }).join('\n');
+    
+    // Combine header and rows
+    const csv = header + rows;
+    
+    // Create blob and download
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    
+    link.setAttribute('href', url);
+    link.setAttribute('download', `emochild-logs-${Date.now()}.csv`);
+    link.style.visibility = 'hidden';
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+  
   return (
     <div className={styles.container}>
+      {/* Export CSV Button */}
+      <div className={styles.exportSection}>
+        <button
+          className={styles.exportButton}
+          onClick={handleExportCSV}
+          aria-label="Export emotion logs to CSV file"
+          type="button"
+        >
+          📊 Export to CSV
+        </button>
+      </div>
+      
       <ul 
         className={styles.logList}
         role="list"
@@ -115,6 +196,7 @@ export function LogHistory({ logs, onDelete }: LogHistoryProps) {
           const textColor = log.textColor || 'white';
           const textColorHex = COLOR_HEX_MAP[textColor];
           const isConfirming = deleteConfirmId === log.id;
+          const isEditing = editingId === log.id;
           
           return (
             <React.Fragment key={log.id}>
@@ -141,16 +223,28 @@ export function LogHistory({ logs, onDelete }: LogHistoryProps) {
                       {formatTimestamp(log.timestamp)}
                     </time>
                     
-                    {/* Requirement 7.3: Delete button */}
-                    {!isConfirming && (
-                      <button
-                        className={styles.deleteButton}
-                        onClick={() => handleDeleteClick(log.id)}
-                        aria-label={`Delete log: ${log.text}`}
-                        type="button"
-                      >
-                        Delete
-                      </button>
+                    {/* Requirement 7.3: Delete and Edit buttons */}
+                    {!isConfirming && !isEditing && (
+                      <div className={styles.actionButtons}>
+                        {onEdit && (
+                          <button
+                            className={styles.editButton}
+                            onClick={() => handleEditClick(log)}
+                            aria-label={`Edit log: ${log.text}`}
+                            type="button"
+                          >
+                            Edit
+                          </button>
+                        )}
+                        <button
+                          className={styles.deleteButton}
+                          onClick={() => handleDeleteClick(log.id)}
+                          aria-label={`Delete log: ${log.text}`}
+                          type="button"
+                        >
+                          Delete
+                        </button>
+                      </div>
                     )}
                   </div>
                   
@@ -173,6 +267,37 @@ export function LogHistory({ logs, onDelete }: LogHistoryProps) {
                           className={styles.cancelButton}
                           onClick={handleCancelDelete}
                           aria-label="Cancel deletion"
+                          type="button"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  ) : isEditing ? (
+                    /* Edit mode */
+                    <div className={styles.editDialog}>
+                      <textarea
+                        className={styles.editTextarea}
+                        value={editText}
+                        onChange={(e) => setEditText(e.target.value)}
+                        maxLength={100}
+                        aria-label="Edit emotion text"
+                        style={{ color: textColorHex }}
+                      />
+                      <div className={styles.editButtons}>
+                        <button
+                          className={styles.saveButton}
+                          onClick={() => handleSaveEdit(log.id)}
+                          aria-label="Save changes"
+                          type="button"
+                          disabled={!editText.trim()}
+                        >
+                          Save
+                        </button>
+                        <button
+                          className={styles.cancelButton}
+                          onClick={handleCancelEdit}
+                          aria-label="Cancel editing"
                           type="button"
                         >
                           Cancel

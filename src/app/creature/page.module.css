@@ -1,0 +1,159 @@
+/**
+ * Creature page styles
+ * Layout: creature at top, micro-sentence below, safety bar, quick emotions, input, actions at bottom
+ */
+
+/* Skip link for keyboard accessibility */
+.skipLink {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--color-mint);
+  color: var(--color-bg-primary);
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 0 0 4px 0;
+  font-weight: 600;
+  z-index: 100;
+  transition: top 0.2s ease;
+}
+
+.skipLink:focus {
+  top: 0;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: var(--spacing-lg);
+  gap: var(--spacing-lg);
+  position: relative;
+  /* Smooth page entrance */
+  animation: fadeInPage var(--transition-medium) ease-out;
+}
+
+@keyframes fadeInPage {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.creatureSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 0 0 auto;
+  min-height: 200px;
+  width: 100%;
+  gap: var(--spacing-md);
+}
+
+.creatureName {
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  margin: 0;
+  text-shadow: 0 0 10px currentColor;
+  animation: fadeIn var(--transition-medium) ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.microSentenceSection {
+  width: 100%;
+  max-width: 500px;
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60px;
+}
+
+.safetySection {
+  width: 100%;
+  max-width: 500px;
+  flex: 0 0 auto;
+}
+
+.quickEmotionsSection {
+  width: 100%;
+  max-width: 500px;
+  flex: 0 0 auto;
+}
+
+.inputSection {
+  width: 100%;
+  max-width: 500px;
+  flex: 0 0 auto;
+}
+
+.actionsSection {
+  width: 100%;
+  max-width: 500px;
+  flex: 0 0 auto;
+}
+
+.navigationSection {
+  width: 100%;
+  max-width: 500px;
+  flex: 0 0 auto;
+  text-align: center;
+  margin-top: var(--spacing-md);
+}
+
+.navigationLinks {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.landingLink,
+.settingsLink {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color var(--transition-fast);
+  padding: var(--spacing-sm);
+}
+
+.landingLink:hover,
+.landingLink:focus,
+.settingsLink:hover,
+.settingsLink:focus {
+  color: var(--color-mint);
+  outline: 2px solid var(--color-mint);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .main {
+    padding: var(--spacing-md);
+    gap: var(--spacing-md);
+  }
+  
+  .creatureSection {
+    min-height: 150px;
+  }
+  
+  .microSentenceSection {
+    min-height: 50px;
+  }
+}

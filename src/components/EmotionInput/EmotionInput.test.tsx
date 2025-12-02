@@ -1,0 +1,387 @@
+/**
+ * Unit tests for EmotionInput component
+ * Tests edge cases for input validation and behavior
+ * Requirements: 1.4, 1.5
+ */
+
+import { describe, it, expect, vi } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { EmotionInput } from './EmotionInput';
+
+describe('EmotionInput', () => {
+  /**
+   * Test: Empty input prevents submission
+   * Requirement 1.4: Prevent empty submission
+   */
+  it('should allow empty input value', () => {
+    const onChange = vi.fn();
+    
+    render(
+      <EmotionInput 
+        value="" 
+        onChange={onChange} 
+        maxLength={100} 
+      />
+    );
+
+    const textarea = screen.getByRole('textbox', { name: /emotion log input/i });
+    expect(textarea).toHaveValue('');
+  });
+
+  /**
+   * Test: Auto-focus behavior
+   * Requirement 1.5: Auto-focus input on mount
+   */
+  it('should auto-focus the textarea on mount', () => {
+    const onChange = vi.fn();
+    
+    render(
+      <EmotionInput 
+        value="" 
+        onChange={onChange} 
+        maxLength={100} 
+      />
+    );
+
+    const textarea = screen.getByRole('textbox', { name: /emotion log input/i });
+    expect(textarea).toHaveFocus();
+  });
+
+  /**
+   * Test: Auto-focus should not occur when disabled
+   */
+  it('should not auto-focus when disabled', () => {
+    const onChange = vi.fn();
+    
+    render(
+      <EmotionInput 
+        value="" 
+        onChange={onChange} 
+        maxLength={100}
+        disabled={true}
+      />
+    );
+
+    const textarea = screen.getByRole('textbox', { name: /emotion log input/i });
+    expect(textarea).not.toHaveFocus();
+  });
+
+  /**
+   * Test: Character counter display
+   * Requirement 1.2: Show real-time character counter
+   */
+  it('should display correct character counter for empty input', () => {
+    const onChange = vi.fn();
+    
+    render(
+      <EmotionInput 
+        value="" 
+        onChange={onChange} 
+        maxLength={100} 
+      />
+    );
+
+    expect(screen.getByText('100/100')).toBeInTheDocument();
+  });
+
+  /**
+   * Test: Character counter updates with input
+   * Requirement 1.2: Show real-time character counter
+   */
+  it('should display correct character counter with text', () => {
+    const onChange = vi.fn();
+    const text = 'Feeling happy today';
+    
+    render(
+      <EmotionInput 
+        value={text} 
+        onChange={onChange} 
+        maxLength={100} 
+      />
+    );
+
+    const remaining = 100 - text.length;
+    expect(screen.getByText(`${remaining}/100`)).toBeInTheDocument();
+  });
+
+  /**
+   * Test: Character counter at maximum length
+   * Requirement 1.3: Prevent exceeding max length
+   */
+  it('should display 0 remaining when at max length', () => {
+    const onChange = vi.fn();
+    const text = 'a'.repeat(100);
+    
+    render(
+      <EmotionInput 
+        value={text} 
+        onChange={onChange} 
+        maxLength={100} 
+      />
+    );
+
+    expect(screen.getByText('0/100')).toBeInTheDocument();
+  });
+
+  /**
+   * Test: Textarea displays current value
+   */
+  it('should display the current value in textarea', () => {
+    const onChange = vi.fn();
+    const text = 'Test emotion';
+    
+    render(
+      <EmotionInput 
+        value={text} 
+        onChange={onChange} 
+        maxLength={100} 
+      />
+    );
+
+    const textarea = screen.getByRole('textbox', { name: /emotion log input/i });
+    expect(textarea).toHaveValue(text);
+  });
+
+  /**
+   * Test: Disabled state
+   */
+  it('should be disabled when disabled prop is true', () => {
+    const onChange = vi.fn();
+    
+    render(
+      <EmotionInput 
+        value="" 
+        onChange={onChange} 
+        maxLength={100}
+        disabled={true}
+      />
+    );
+
+    const textarea = screen.getByRole('textbox', { name: /emotion log input/i });
+    expect(textarea).toBeDisabled();
+  });
+
+  /**
+   * Test: Accessibility - ARIA labels
+   */
+  it('should have proper ARIA labels', () => {
+    const onChange = vi.fn();
+    
+    render(
+      <EmotionInput 
+        value="" 
+        onChange={onChange} 
+        maxLength={100} 
+      />
+    );
+
+    const textarea = screen.getByRole('textbox', { name: /emotion log input/i });
+    expect(textarea).toHaveAttribute('aria-label', 'Emotion log input');
+    expect(textarea).toHaveAttribute('aria-describedby', 'char-counter');
+  });
+
+  /**
+   * Test: Character counter has live region for screen readers
+   */
+  it('should have aria-live on character counter', () => {
+    const onChange = vi.fn();
+    
+    render(
+      <EmotionInput 
+        value="" 
+        onChange={onChange} 
+        maxLength={100} 
+      />
+    );
+
+    const counter = screen.getByText('100/100');
+    expect(counter).toHaveAttribute('aria-live', 'polite');
+  });
+
+  /**
+   * Test: Initial text prefilling
+   * Requirement 3.3: Accept initialText prop for quick emotion prefilling
+   */
+  it('should prefill input with initialText when provided', () => {
+    const onChange = vi.fn();
+    const initialText = 'stressed';
+    
+    render(
+      <EmotionInput 
+        value="" 
+        onChange={onChange} 
+        maxLength={100}
+        initialText={initialText}
+      />
+    );
+
+    // Should call onChange with the initial text
+    expect(onChange).toHaveBeenCalledWith(initialText);
+  });
+
+  /**
+   * Test: Character counter with prefilled text
+   * Requirement 3.4: Maintain character counter with prefilled text
+   */
+  it('should update character counter with prefilled text', () => {
+    const onChange = vi.fn();
+    const initialText = 'anxious';
+    
+    render(
+      <EmotionInput 
+        value={initialText} 
+        onChange={onChange} 
+        maxLength={100}
+        initialText={initialText}
+      />
+    );
+
+    const remaining = 100 - initialText.length;
+    expect(screen.getByText(`${remaining}/100`)).toBeInTheDocument();
+  });
+
+  /**
+   * Test: Text color application
+   * Requirement 4.2: Apply text color to input field
+   */
+  it('should apply text color to textarea', () => {
+    const onChange = vi.fn();
+    const onTextColorChange = vi.fn();
+    
+    render(
+      <EmotionInput 
+        value="test" 
+        onChange={onChange} 
+        maxLength={100}
+        textColor="mint"
+        onTextColorChange={onTextColorChange}
+      />
+    );
+
+    const textarea = screen.getByRole('textbox', { name: /emotion log input/i });
+    expect(textarea).toHaveStyle({ color: 'var(--color-mint)' });
+  });
+
+  /**
+   * Test: ColorPicker integration
+   * Requirement 4.2: Integrate ColorPicker for text color selection
+   */
+  it('should render ColorPicker when onTextColorChange is provided', () => {
+    const onChange = vi.fn();
+    const onTextColorChange = vi.fn();
+    
+    render(
+      <EmotionInput 
+        value="" 
+        onChange={onChange} 
+        maxLength={100}
+        textColor="white"
+        onTextColorChange={onTextColorChange}
+      />
+    );
+
+    // ColorPicker should be present
+    expect(screen.getByText('Text color')).toBeInTheDocument();
+  });
+
+  /**
+   * Test: ColorPicker not rendered without callback
+   */
+  it('should not render ColorPicker when onTextColorChange is not provided', () => {
+    const onChange = vi.fn();
+    
+    render(
+      <EmotionInput 
+        value="" 
+        onChange={onChange} 
+        maxLength={100}
+      />
+    );
+
+    // ColorPicker should not be present
+    expect(screen.queryByText('Text color')).not.toBeInTheDocument();
+  });
+
+  /**
+   * Error condition tests
+   * Requirement 1.4: Empty input validation
+   */
+  describe('Empty input validation', () => {
+    it('should not show validation error by default', () => {
+      const onChange = vi.fn();
+      
+      render(
+        <EmotionInput 
+          value="" 
+          onChange={onChange} 
+          maxLength={100} 
+        />
+      );
+
+      expect(screen.queryByText('Share a feeling to continue')).not.toBeInTheDocument();
+    });
+
+    it('should show validation error when showEmptyError is true and input is empty', () => {
+      const onChange = vi.fn();
+      
+      render(
+        <EmotionInput 
+          value="" 
+          onChange={onChange} 
+          maxLength={100}
+          showEmptyError={true}
+        />
+      );
+
+      const errorMessage = screen.getByText('Share a feeling to continue');
+      expect(errorMessage).toBeInTheDocument();
+      expect(errorMessage).toHaveAttribute('role', 'alert');
+      expect(errorMessage).toHaveAttribute('aria-live', 'assertive');
+    });
+
+    it('should show validation error for whitespace-only input', () => {
+      const onChange = vi.fn();
+      
+      render(
+        <EmotionInput 
+          value="   " 
+          onChange={onChange} 
+          maxLength={100}
+          showEmptyError={true}
+        />
+      );
+
+      expect(screen.getByText('Share a feeling to continue')).toBeInTheDocument();
+    });
+
+    it('should not show validation error when input has content', () => {
+      const onChange = vi.fn();
+      
+      render(
+        <EmotionInput 
+          value="Feeling happy" 
+          onChange={onChange} 
+          maxLength={100}
+          showEmptyError={true}
+        />
+      );
+
+      expect(screen.queryByText('Share a feeling to continue')).not.toBeInTheDocument();
+    });
+
+    it('should hide validation error when showEmptyError is false', () => {
+      const onChange = vi.fn();
+      
+      render(
+        <EmotionInput 
+          value="" 
+          onChange={onChange} 
+          maxLength={100}
+          showEmptyError={false}
+        />
+      );
+
+      expect(screen.queryByText('Share a feeling to continue')).not.toBeInTheDocument();
+    });
+  });
+});

@@ -1,0 +1,94 @@
+.toast {
+  position: fixed;
+  bottom: var(--spacing-lg);
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 500px;
+  width: calc(100% - var(--spacing-lg) * 2);
+  background-color: var(--color-bg-secondary);
+  border: 2px solid var(--color-peach);
+  border-radius: 12px;
+  padding: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 212, 163, 0.2);
+  z-index: 1000;
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex: 1;
+}
+
+.icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.message {
+  font-size: var(--font-size-body);
+  color: var(--color-peach);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.4;
+}
+
+.dismissButton {
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  font-size: 20px;
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.dismissButton:hover {
+  color: var(--color-peach);
+  background-color: rgba(255, 212, 163, 0.1);
+}
+
+.dismissButton:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-peach);
+}
+
+.fadeIn {
+  /* Requirement 3.3, 8.2: Use CSS custom properties for timing */
+  animation: slideUp var(--transition-medium) ease-out forwards;
+}
+
+.fadeOut {
+  /* Requirement 3.3, 8.2: Use CSS custom properties for timing */
+  animation: slideDown var(--transition-fast) ease-in forwards;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+}

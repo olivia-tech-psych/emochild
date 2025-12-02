@@ -1,0 +1,83 @@
+.container {
+  min-height: 100vh;
+  background-color: var(--color-bg-primary);
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  /* Requirement 8.2: Smooth page entrance */
+  animation: fadeInPage var(--transition-medium) ease-out;
+}
+
+@keyframes fadeInPage {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.navigation {
+  margin-bottom: var(--spacing-lg);
+}
+
+.backLink {
+  color: var(--color-mint);
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+  transition: opacity var(--transition-fast);
+  display: inline-block;
+}
+
+.backLink:hover {
+  opacity: 0.8;
+}
+
+.backLink:focus {
+  outline: 2px solid var(--color-mint);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.title {
+  color: var(--color-text-primary);
+  font-size: 24px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.historyContainer {
+  flex: 1;
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Responsive design for mobile - Requirement 7.5 */
+@media (max-width: 600px) {
+  .container {
+    padding: var(--spacing-md);
+  }
+  
+  .title {
+    font-size: 20px;
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .backLink {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 400px) {
+  .container {
+    padding: var(--spacing-sm);
+  }
+  
+  .title {
+    font-size: 18px;
+    margin-bottom: var(--spacing-md);
+  }
+}

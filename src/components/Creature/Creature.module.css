@@ -1,0 +1,264 @@
+/**
+ * Creature Component Styles
+ * Implements all creature animations and visual effects
+ * Requirements: 3.1, 3.2, 3.4, 3.5, 6.1, 6.2, 6.3, 6.4, 6.5, 8.1, 8.2, 8.3, 8.4
+ */
+
+.creatureContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.creature {
+  width: 120px;
+  height: 120px;
+  border-radius: 50% 50% 45% 45%;
+  /* Requirement 6.1, 6.3: Background and box-shadow now set via inline styles from customization */
+  position: relative;
+  /* Requirement 8.2, 8.3: Smooth transitions for all state changes */
+  /* Requirement 6.4, 6.5: Transitions maintain color while dimming/brightening */
+  /* Use GPU-accelerated properties for better performance */
+  transition: 
+    filter var(--transition-slow),
+    transform var(--transition-slow),
+    box-shadow var(--transition-slow),
+    background var(--transition-slow);
+  /* Enable hardware acceleration */
+  will-change: transform, filter;
+  /* Smooth rendering */
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Eyes */
+.creature::before,
+.creature::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: var(--color-bg-primary);
+  border-radius: 50%;
+  top: 40%;
+}
+
+.creature::before {
+  left: 30%;
+}
+
+.creature::after {
+  right: 30%;
+}
+
+/* Idle breathing animation - Requirement 8.1 */
+@keyframes breathe {
+  0%, 100% {
+    transform: scale(1) translateY(0);
+  }
+  50% {
+    transform: scale(1.02) translateY(-2px);
+  }
+}
+
+.creatureIdle {
+  /* Requirement 3.3, 8.2: Use CSS custom properties for timing */
+  animation: breathe 3s ease-in-out infinite;
+  /* Smooth animation performance */
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Grow animation for expressed emotions - Requirement 3.1 */
+@keyframes grow {
+  0% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.15);
+    filter: brightness(1.3);
+  }
+  100% {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+  }
+}
+
+.creatureGrow {
+  /* Requirement 3.3, 8.2: Use CSS custom properties for timing */
+  animation: grow var(--transition-slow) ease-out forwards;
+  /* Smooth animation with custom easing */
+  animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Curl animation for suppressed emotions - Requirement 3.2 */
+@keyframes curl {
+  0% {
+    transform: scale(1) rotate(0deg);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(0.9) rotate(-5deg);
+    filter: brightness(0.7);
+  }
+  100% {
+    transform: scale(0.95) rotate(-2deg);
+    filter: brightness(0.8);
+  }
+}
+
+.creatureCurl {
+  /* Requirement 3.3, 8.2: Use CSS custom properties for timing */
+  animation: curl var(--transition-slow) ease-out forwards;
+  /* Smooth animation with custom easing */
+  animation-timing-function: cubic-bezier(0.32, 0, 0.67, 0);
+}
+
+/* Celebrate animation for maximum brightness - Requirement 3.4 */
+@keyframes celebrate {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    transform: scale(1.2) rotate(10deg);
+  }
+  50% {
+    transform: scale(1.15) rotate(-10deg);
+  }
+  75% {
+    transform: scale(1.2) rotate(5deg);
+  }
+  100% {
+    transform: scale(1.1) rotate(0deg);
+  }
+}
+
+.creatureCelebrate {
+  /* Requirement 3.3, 8.2: Use CSS custom properties for timing */
+  animation: celebrate var(--transition-slow) ease-in-out forwards;
+  filter: brightness(1.5);
+  box-shadow: var(--glow-mint), var(--glow-lavender);
+  /* Smooth bouncy animation */
+  animation-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Bow accessory - Requirement 6.2 */
+/* Styled to look like 🎀 emoji with ribbon loops */
+.bow {
+  position: absolute;
+  top: 15%;
+  right: 15%;  /* Right side of creature's head (user's left side) */
+  width: 28px;
+  height: 28px;
+  z-index: 10;
+}
+
+/* Center knot of the bow */
+.bow::before {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 12px;
+  background: #C11C84;  /* Dark pink bow color */
+  border-radius: 20%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  z-index: 3;
+}
+
+/* Left loop of the bow */
+.bow::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 20px;
+  background: #D63A9D;  /* Slightly lighter pink for depth */
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  top: 50%;
+  left: -6px;
+  transform: translateY(-50%) rotate(-15deg);
+  box-shadow: inset -2px -2px 4px rgba(0, 0, 0, 0.15);
+  z-index: 1;
+}
+
+/* Right loop of the bow */
+.bowRightLoop {
+  position: absolute;
+  width: 16px;
+  height: 20px;
+  background: #D63A9D;  /* Slightly lighter pink for depth */
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  top: 50%;
+  right: -6px;
+  transform: translateY(-50%) rotate(15deg);
+  box-shadow: inset 2px -2px 4px rgba(0, 0, 0, 0.15);
+  z-index: 1;
+}
+
+/* Responsive design for mobile - Requirement 7.5 */
+@media (max-width: 600px) {
+  .creature {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .creature::before,
+  .creature::after {
+    width: 10px;
+    height: 10px;
+  }
+  
+  .bow {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .bow::before {
+    width: 8px;
+    height: 10px;
+  }
+  
+  .bow::after {
+    width: 14px;
+    height: 17px;
+  }
+  
+  .bowRightLoop {
+    width: 14px;
+    height: 17px;
+  }
+}
+
+@media (max-width: 400px) {
+  .creature {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .creature::before,
+  .creature::after {
+    width: 8px;
+    height: 8px;
+  }
+  
+  .bow {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .bow::before {
+    width: 7px;
+    height: 8px;
+  }
+  
+  .bow::after {
+    width: 12px;
+    height: 14px;
+  }
+  
+  .bowRightLoop {
+    width: 12px;
+    height: 14px;
+  }
+}

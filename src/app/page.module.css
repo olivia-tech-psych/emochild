@@ -1,0 +1,111 @@
+/**
+ * Main page styles
+ * Layout: creature at top, safety bar below, input in middle, actions at bottom
+ */
+
+/* Skip link for keyboard accessibility - Requirement 7.5 */
+.skipLink {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--color-mint);
+  color: var(--color-bg-primary);
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 0 0 4px 0;
+  font-weight: 600;
+  z-index: 100;
+  transition: top 0.2s ease;
+}
+
+.skipLink:focus {
+  top: 0;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: var(--spacing-lg);
+  gap: var(--spacing-lg);
+  position: relative;
+  /* Requirement 8.2: Smooth page entrance */
+  animation: fadeInPage var(--transition-medium) ease-out;
+}
+
+@keyframes fadeInPage {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.creatureSection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 0 0 auto;
+  min-height: 200px;
+  width: 100%;
+}
+
+.safetySection {
+  width: 100%;
+  max-width: 500px;
+  flex: 0 0 auto;
+}
+
+.inputSection {
+  width: 100%;
+  max-width: 500px;
+  flex: 0 0 auto;
+}
+
+.actionsSection {
+  width: 100%;
+  max-width: 500px;
+  flex: 0 0 auto;
+}
+
+.navigationSection {
+  width: 100%;
+  max-width: 500px;
+  flex: 0 0 auto;
+  text-align: center;
+  margin-top: var(--spacing-md);
+}
+
+.historyLink {
+  color: var(--color-lavender);
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+  transition: opacity var(--transition-fast);
+  display: inline-block;
+  padding: var(--spacing-sm);
+}
+
+.historyLink:hover {
+  opacity: 0.8;
+}
+
+.historyLink:focus {
+  outline: 2px solid var(--color-lavender);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .main {
+    padding: var(--spacing-md);
+    gap: var(--spacing-md);
+  }
+  
+  .creatureSection {
+    min-height: 150px;
+  }
+}

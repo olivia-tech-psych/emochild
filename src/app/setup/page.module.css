@@ -1,0 +1,13 @@
+/**
+ * Setup Page Styles
+ * Styles for the setup flow page
+ */
+
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-lg);
+  background: var(--color-bg-primary);
+}

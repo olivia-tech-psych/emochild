@@ -1,0 +1,456 @@
+/**
+ * LogHistory Component Styles
+ * Requirements: 6.1, 6.2, 6.3, 6.4, 6.5, 7.1, 7.2
+ */
+
+/* Container with scrolling support */
+/* Requirement 6.4: Scrolling for long lists */
+.container {
+  width: 100%;
+  max-height: 600px;
+  overflow-y: auto;
+  padding: var(--spacing-md);
+}
+
+/* Export section */
+.exportSection {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: var(--spacing-md);
+}
+
+.exportButton {
+  font-size: var(--font-size-small);
+  color: var(--color-text-primary);
+  background: var(--color-mint);
+  color: var(--color-bg-primary);
+  border: none;
+  padding: var(--spacing-sm) var(--spacing-md);
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all var(--transition-fast);
+  font-weight: var(--font-weight-semibold);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.exportButton:hover {
+  background: var(--color-blue);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(201, 228, 222, 0.3);
+}
+
+.exportButton:focus {
+  outline: 2px solid var(--color-mint);
+  outline-offset: 2px;
+}
+
+.exportButton:active {
+  transform: translateY(0);
+}
+
+/* Custom scrollbar styling for dark theme */
+.container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.container::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary);
+  border-radius: 4px;
+}
+
+.container::-webkit-scrollbar-thumb {
+  background: var(--color-lavender);
+  border-radius: 4px;
+}
+
+.container::-webkit-scrollbar-thumb:hover {
+  background: var(--color-mint);
+}
+
+/* Log list */
+.logList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+/* Individual log item */
+/* Requirement 6.2: Display with appropriate styling */
+.logItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  background: var(--color-bg-secondary);
+  border-radius: 8px;
+  border-left: 3px solid transparent;
+  /* Requirement 8.2, 8.3: Smooth transitions for all state changes */
+  transition: 
+    transform var(--transition-fast), 
+    box-shadow var(--transition-fast),
+    border-left-color var(--transition-fast),
+    background-color var(--transition-fast);
+  /* Add subtle entrance animation */
+  animation: slideInFromLeft var(--transition-medium) ease-out;
+}
+
+.logItem:hover {
+  transform: translateX(4px);
+  background: rgba(45, 45, 45, 0.8);
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Requirement 6.5: Visual indicators for expressed vs suppressed */
+.logItem.expressed {
+  border-left-color: var(--color-mint);
+}
+
+.logItem.suppressed {
+  border-left-color: #8b7fa8; /* Muted lavender */
+}
+
+/* Icon styling */
+.icon {
+  font-size: 20px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+/* Log content container */
+.logContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+/* Log header with timestamp and delete button */
+/* Requirement 7.1: Display timestamp and delete button on same line */
+.logHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+/* Timestamp styling */
+/* Requirement 7.1: Display timestamp */
+.timestamp {
+  font-size: var(--font-size-small);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+}
+
+/* Action buttons container */
+.actionButtons {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+/* Edit button styling */
+.editButton {
+  font-size: var(--font-size-small);
+  color: var(--color-blue);
+  background: transparent;
+  border: none;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+  font-weight: var(--font-weight-medium);
+}
+
+.editButton:hover {
+  background: rgba(160, 210, 235, 0.1);
+  color: var(--color-mint);
+}
+
+.editButton:focus {
+  outline: 2px solid var(--color-blue);
+  outline-offset: 2px;
+}
+
+.editButton:active {
+  transform: scale(0.95);
+}
+
+/* Delete button styling */
+/* Requirement 7.3: Delete button for each entry */
+.deleteButton {
+  font-size: var(--font-size-small);
+  color: var(--color-red);
+  background: transparent;
+  border: none;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+  font-weight: var(--font-weight-medium);
+}
+
+.deleteButton:hover {
+  background: rgba(243, 93, 105, 0.1);
+  color: #ff6b7a;
+}
+
+.deleteButton:focus {
+  outline: 2px solid var(--color-red);
+  outline-offset: 2px;
+}
+
+.deleteButton:active {
+  transform: scale(0.95);
+}
+
+/* Emotion text styling */
+/* Requirement 7.1: Display emotion text in saved color */
+.text {
+  font-size: var(--font-size-body);
+  /* Color is set inline via style prop */
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+/* Confirmation dialog styling */
+/* Requirement 7.3: Confirmation dialog before deletion */
+.confirmDialog {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  background: rgba(243, 93, 105, 0.1);
+  border-radius: 6px;
+  border: 1px solid var(--color-red);
+}
+
+.confirmMessage {
+  font-size: var(--font-size-small);
+  color: var(--color-text-primary);
+  margin: 0;
+  font-weight: var(--font-weight-medium);
+}
+
+.confirmButtons {
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: flex-end;
+}
+
+.confirmButton,
+.cancelButton {
+  font-size: var(--font-size-small);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-weight: var(--font-weight-medium);
+  transition: all var(--transition-fast);
+}
+
+.confirmButton {
+  background: var(--color-red);
+  color: white;
+}
+
+.confirmButton:hover {
+  background: #ff6b7a;
+  transform: translateY(-1px);
+}
+
+.confirmButton:focus {
+  outline: 2px solid var(--color-red);
+  outline-offset: 2px;
+}
+
+.cancelButton {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-text-secondary);
+}
+
+.cancelButton:hover {
+  background: var(--color-bg-primary);
+  border-color: var(--color-text-primary);
+}
+
+.cancelButton:focus {
+  outline: 2px solid var(--color-mint);
+  outline-offset: 2px;
+}
+
+/* Edit dialog styling */
+.editDialog {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  background: rgba(160, 210, 235, 0.1);
+  border-radius: 6px;
+  border: 1px solid var(--color-blue);
+}
+
+.editTextarea {
+  width: 100%;
+  min-height: 80px;
+  padding: var(--spacing-sm);
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-blue);
+  border-radius: 4px;
+  font-size: var(--font-size-body);
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color var(--transition-fast);
+}
+
+.editTextarea:focus {
+  outline: none;
+  border-color: var(--color-mint);
+  box-shadow: 0 0 0 2px rgba(201, 228, 222, 0.2);
+}
+
+.editButtons {
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: flex-end;
+}
+
+.saveButton {
+  font-size: var(--font-size-small);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-weight: var(--font-weight-medium);
+  transition: all var(--transition-fast);
+  background: var(--color-mint);
+  color: var(--color-bg-primary);
+}
+
+.saveButton:hover:not(:disabled) {
+  background: var(--color-blue);
+  transform: translateY(-1px);
+}
+
+.saveButton:focus {
+  outline: 2px solid var(--color-mint);
+  outline-offset: 2px;
+}
+
+.saveButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Divider between log entries */
+/* Requirement 7.4: Pastel dividers between entries */
+.divider {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--color-lavender) 20%,
+    var(--color-mint) 50%,
+    var(--color-lavender) 80%,
+    transparent
+  );
+  opacity: 0.3;
+  margin: var(--spacing-xs) 0;
+}
+
+/* Empty state styling */
+/* Requirement 6.3: Empty state message */
+.emptyState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  padding: var(--spacing-xl);
+}
+
+.emptyMessage {
+  font-size: var(--font-size-body);
+  color: var(--color-text-secondary);
+  text-align: center;
+  max-width: 300px;
+}
+
+/* Responsive design for mobile - Requirement 7.5 */
+@media (max-width: 600px) {
+  .container {
+    padding: var(--spacing-sm);
+    max-height: 500px;
+  }
+  
+  .logItem {
+    padding: var(--spacing-sm);
+    gap: var(--spacing-xs);
+  }
+  
+  .icon {
+    font-size: 18px;
+  }
+  
+  .timestamp {
+    font-size: 13px;
+  }
+  
+  .text {
+    font-size: 15px;
+  }
+  
+  .deleteButton {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+  
+  .confirmButtons {
+    flex-direction: column;
+  }
+  
+  .confirmButton,
+  .cancelButton {
+    width: 100%;
+  }
+}
+
+@media (max-width: 400px) {
+  .container {
+    padding: var(--spacing-xs);
+    max-height: 400px;
+  }
+  
+  .logList {
+    gap: var(--spacing-xs);
+  }
+  
+  .logItem {
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+  
+  .emptyState {
+    min-height: 150px;
+    padding: var(--spacing-lg);
+  }
+  
+  .emptyMessage {
+    font-size: 15px;
+  }
+  
+  .logHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

@@ -1,0 +1,72 @@
+.container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem 0;
+  animation: fadeInOut 2s ease-in-out forwards;
+  /* Enable hardware acceleration for smooth animation */
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+.sentence {
+  padding: 0.75rem 2.5rem 0.75rem 1.5rem;
+  background: var(--color-bg-secondary);
+  border-radius: 12px;
+  color: var(--color-text-primary);
+  font-size: 0.95rem;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(201, 228, 222, 0.4),
+              0 0 30px rgba(160, 210, 235, 0.3),
+              0 0 40px rgba(219, 205, 240, 0.2);
+  max-width: 90%;
+  /* Smooth transitions for any dynamic changes */
+  transition: box-shadow var(--transition-medium);
+}
+
+.dismissButton {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  line-height: 1;
+  transition: color var(--transition-fast);
+}
+
+.dismissButton:hover {
+  color: var(--color-text-primary);
+}
+
+.dismissButton:focus {
+  outline: 2px solid var(--color-mint);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Requirement 5.5: Smooth fade in/out animation for micro-sentences */
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  90% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+}

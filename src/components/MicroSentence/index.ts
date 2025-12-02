@@ -1,0 +1,1 @@
+export { MicroSentence } from './MicroSentence';

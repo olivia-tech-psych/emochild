@@ -1,0 +1,149 @@
+:root {
+  /* Background */
+  --color-bg-primary: #1a1a1a;
+  --color-bg-secondary: #2d2d2d;
+  
+  /* Extended pastel palette - all 8 colors */
+  --color-mint: #C9E4DE;
+  --color-blue: #a0d2eb;
+  --color-lavender: #DBCDF0;
+  --color-peach: #fcded3;
+  --color-pink: #F2C6DE;
+  --color-yellow: #ffeaa7;
+  --color-red: #f35d69;
+  --color-orange: #ff964f;
+  --color-white: #ffffff;
+  
+  /* Dark pink bow color */
+  --color-bow: #C11C84;
+  
+  /* Text */
+  --color-text-primary: #f5f5f5;
+  --color-text-secondary: #b0b0b0;
+  
+  /* Glow effects for each color */
+  --glow-mint: 0 0 20px rgba(201, 228, 222, 0.6);
+  --glow-blue: 0 0 20px rgba(160, 210, 235, 0.6);
+  --glow-lavender: 0 0 20px rgba(219, 205, 240, 0.6);
+  --glow-peach: 0 0 20px rgba(252, 222, 211, 0.6);
+  --glow-pink: 0 0 20px rgba(242, 198, 222, 0.6);
+  --glow-yellow: 0 0 20px rgba(255, 234, 167, 0.6);
+  --glow-red: 0 0 20px rgba(243, 93, 105, 0.6);
+  --glow-orange: 0 0 20px rgba(255, 150, 79, 0.6);
+  
+  /* Spacing */
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  
+  /* Animation */
+  --transition-fast: 0.2s ease;
+  --transition-medium: 0.5s ease;
+  --transition-slow: 1s ease;
+  
+  /* Typography */
+  --font-size-heading: 24px;
+  --font-size-body: 16px;
+  --font-size-small: 14px;
+  --font-size-tiny: 12px;
+  
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Micro-sentence fade in/out animation - Requirement 5.5 */
+@keyframes fadeInOut {
+  0% { 
+    opacity: 0; 
+    transform: translateY(-10px) scale(0.95); 
+  }
+  10% { 
+    opacity: 1; 
+    transform: translateY(0) scale(1); 
+  }
+  90% { 
+    opacity: 1; 
+    transform: translateY(0) scale(1); 
+  }
+  100% { 
+    opacity: 0; 
+    transform: translateY(-10px) scale(0.95); 
+  }
+}
+
+/* Requirement 8.2: Respect user's motion preferences for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Responsive typography - Requirement 7.5 */
+@media (max-width: 600px) {
+  :root {
+    --font-size-heading: 20px;
+    --font-size-body: 15px;
+    --font-size-small: 13px;
+    --font-size-tiny: 11px;
+  }
+}
+
+@media (max-width: 400px) {
+  :root {
+    --font-size-heading: 18px;
+    --font-size-body: 14px;
+    --font-size-small: 12px;
+    --font-size-tiny: 10px;
+  }
+}
+
+/* Ensure minimum touch target sizes - Requirement 7.5 */
+button,
+a,
+input,
+textarea,
+select {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Exception for inline elements */
+a:not([role="button"]) {
+  min-height: auto;
+  min-width: auto;
+}

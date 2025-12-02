@@ -6,7 +6,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import fc from 'fast-check';
-import Home from './page';
+import CreaturePage from './creature/page';
 import { EmotionProvider } from '@/context/EmotionContext';
 
 // Mock localStorage
@@ -38,10 +38,16 @@ function renderWithContext(component: React.ReactElement) {
 describe('Home Page', () => {
   beforeEach(() => {
     localStorageMock.clear();
+    // Set up customization so creature page renders
+    localStorageMock.setItem('emochild_customization', JSON.stringify({
+      name: 'TestCreature',
+      color: 'orange',
+      hasBow: false
+    }));
   });
 
   it('should render all main components', async () => {
-    renderWithContext(<Home />);
+    renderWithContext(<CreaturePage />);
     
     // Wait for context to initialize
     await waitFor(() => {
@@ -69,9 +75,15 @@ describe('Home Page', () => {
           async (inputText, actionType) => {
             // Clear localStorage before each property test iteration
             localStorageMock.clear();
+            // Set up customization so creature page renders
+            localStorageMock.setItem('emochild_customization', JSON.stringify({
+              name: 'TestCreature',
+              color: 'orange',
+              hasBow: false
+            }));
             
             // Render the component with a container
-            const { unmount, container } = renderWithContext(<Home />);
+            const { unmount, container } = renderWithContext(<CreaturePage />);
             
             try {
               // Wait for context to initialize
@@ -152,12 +164,18 @@ describe('Home Page', () => {
             async (inputText, actionType) => {
               // Clear localStorage before each property test iteration
               localStorageMock.clear();
+              // Set up customization so creature page renders
+              localStorageMock.setItem('emochild_customization', JSON.stringify({
+                name: 'TestCreature',
+                color: 'orange',
+                hasBow: false
+              }));
               
               // Clear network requests tracking
               networkRequests.length = 0;
               
               // Render the component
-              const { unmount } = renderWithContext(<Home />);
+              const { unmount } = renderWithContext(<CreaturePage />);
               
               // Wait for context to initialize
               await waitFor(() => {

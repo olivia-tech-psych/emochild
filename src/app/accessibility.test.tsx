@@ -6,14 +6,45 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import Home from './page';
+import CreaturePage from './creature/page';
 import { EmotionProvider } from '@/context/EmotionContext';
 
+// Mock localStorage
+const localStorageMock = (() => {
+  let store: Record<string, string> = {};
+  return {
+    getItem: (key: string) => store[key] || null,
+    setItem: (key: string, value: string) => {
+      store[key] = value;
+    },
+    clear: () => {
+      store = {};
+    },
+    removeItem: (key: string) => {
+      delete store[key];
+    },
+  };
+})();
+
+Object.defineProperty(window, 'localStorage', {
+  value: localStorageMock,
+});
+
 describe('Accessibility Features - Requirement 7.5', () => {
+  beforeEach(() => {
+    localStorageMock.clear();
+    // Set up customization so creature page renders
+    localStorageMock.setItem('emochild_customization', JSON.stringify({
+      name: 'TestCreature',
+      color: 'orange',
+      hasBow: false
+    }));
+  });
+
   const renderWithProvider = () => {
     return render(
       <EmotionProvider>
-        <Home />
+        <CreaturePage />
       </EmotionProvider>
     );
   };

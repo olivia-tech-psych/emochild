@@ -1,0 +1,19 @@
+{
+  "enabled": true,
+  "name": "README Auto-Updater",
+  "description": "Automatically updates README.md sections (Current Features, File Structure, Kiro Features Used, and Changelog) whenever files in /pages, /components, /lib, or /styles are modified. Summarizes changes, maintains markdown formatting, preserves the project description, and appends timestamped changelog entries.",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "**/pages/**",
+      "**/components/**",
+      "**/lib/**",
+      "**/styles/**"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Files in /pages, /components, /lib, or /styles have been modified. Please update the README.md file with the following requirements:\n\n1. Open and read the current README.md to understand its structure\n2. Analyze the recent changes in the modified files to understand what has changed since the last update\n3. Update these sections in README.md:\n   - \"Current Features Implemented\" - summarize new or modified features\n   - \"File Structure Overview\" - reflect any structural changes\n   - \"Kiro Features Used (Vibe Coding, Specs, Hooks)\" - document any new Kiro features being used\n   - \"Changelog\" - append a new timestamped entry describing the changes\n4. Only summarize meaningful changes - if no significant changes occurred, skip the update\n5. Maintain human-friendly markdown formatting throughout\n6. DO NOT modify or overwrite the top-level project description or any other sections\n7. Ensure the README accurately reflects the current state of the project\n8. Add a timestamp to the changelog entry in format: [YYYY-MM-DD HH:MM]\n\nFocus on clarity and conciseness. The README should be helpful for developers understanding the project."
+  }
+}

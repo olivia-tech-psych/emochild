@@ -62,7 +62,7 @@ export function EmotionInput({
     if (initialText && initialText !== value) {
       onChange(initialText);
     }
-  }, [initialText]);
+  }, [initialText, value, onChange]);
 
   // Requirement 1.5: Auto-focus input on mount
   useEffect(() => {

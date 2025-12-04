@@ -73,7 +73,7 @@ export function LogHistory({ logs, onDelete, onEdit }: LogHistoryProps) {
     return (
       <div className={styles.emptyState} role="status" aria-live="polite">
         <p className={styles.emptyMessage}>
-          No emotions logged yet. Start by sharing how you're feeling! 🌱
+          No emotions logged yet. Start by sharing how you&apos;re feeling! 🌱
         </p>
       </div>
     );

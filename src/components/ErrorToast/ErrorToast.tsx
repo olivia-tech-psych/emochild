@@ -6,7 +6,7 @@
 
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import styles from './ErrorToast.module.css';
 
 export interface ErrorToastProps {
@@ -34,6 +34,14 @@ export function ErrorToast({
 }: ErrorToastProps) {
   const [isAnimatingOut, setIsAnimatingOut] = useState(false);
 
+  const handleDismiss = useCallback(() => {
+    setIsAnimatingOut(true);
+    setTimeout(() => {
+      onDismiss();
+      setIsAnimatingOut(false);
+    }, 200); // Match animation duration
+  }, [onDismiss]);
+
   useEffect(() => {
     if (isVisible && duration > 0) {
       const timer = setTimeout(() => {
@@ -42,15 +50,7 @@ export function ErrorToast({
 
       return () => clearTimeout(timer);
     }
-  }, [isVisible, duration]);
-
-  const handleDismiss = () => {
-    setIsAnimatingOut(true);
-    setTimeout(() => {
-      onDismiss();
-      setIsAnimatingOut(false);
-    }, 200); // Match animation duration
-  };
+  }, [isVisible, duration, handleDismiss]);
 
   if (!isVisible && !isAnimatingOut) {
     return null;
